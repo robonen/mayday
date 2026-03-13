@@ -76,6 +76,8 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
               let severityStr = attributes["severity"] as? String,
               let severity = Severity(rawValue: severityStr) else { return }
 
+        // Info-level alerts don't warrant a persistent Live Activity — they are low-priority
+        // and should only appear as a standard banner notification.
         guard severity != .info else { return }
 
         // Limit to 3 concurrent activities

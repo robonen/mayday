@@ -150,8 +150,18 @@ actor HTTPClient {
             urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
-        if let body = endpoint.body, endpoint.method != "GET" {
-            urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        if let body = endpoint.body {
+            if endpoint.method == "GET" {
+                // Append query parameters to URL for GET requests
+                if var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+                    components.queryItems = body.map { key, value in
+                        URLQueryItem(name: key, value: "\(value)")
+                    }
+                    urlRequest.url = components.url
+                }
+            } else {
+                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: body)
+            }
         }
 
         let (data, response): (Data, URLResponse)

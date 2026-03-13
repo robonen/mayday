@@ -70,6 +70,8 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func startPolling() {
+        // Polling always reloads page 1 to pick up new notifications.
+        // Users who have scrolled to older pages will have the list reset on each interval.
         pollingTask = Task {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(30))

@@ -22,14 +22,13 @@ struct SettingsView: View {
                         showChangePassword = true
                     }
 
-                    Toggle(isOn: .constant(true)) {
-                        Label("Push-уведомления", systemImage: "bell.badge")
-                    }
-                    .onChange(of: true) { _, _ in
-                        // Open system settings
+                    Button {
                         if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
                             UIApplication.shared.open(url)
                         }
+                    } label: {
+                        Label("Push-уведомления", systemImage: "bell.badge")
+                            .foregroundStyle(.primary)
                     }
                 }
 
