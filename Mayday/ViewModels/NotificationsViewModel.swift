@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import UIKit
 
 @MainActor
 class NotificationsViewModel: ObservableObject {
@@ -70,8 +71,8 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func startPolling() {
-        // Polling always reloads page 1 to pick up new notifications.
-        // Users who have scrolled to older pages will have the list reset on each interval.
+        // Guard against starting a second polling loop if already running.
+        guard pollingTask == nil else { return }
         pollingTask = Task {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(30))
@@ -88,8 +89,6 @@ class NotificationsViewModel: ObservableObject {
 
     private func updateBadge() {
         let unreadCount = notifications.filter { !$0.isRead }.count
-        Task {
-            await service.updateAppBadge(unreadCount)
-        }
+        UIApplication.shared.applicationIconBadgeNumber = unreadCount
     }
 }

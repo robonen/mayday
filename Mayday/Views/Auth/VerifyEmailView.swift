@@ -7,7 +7,7 @@ struct VerifyEmailView: View {
     @State private var codeDigits: [String] = Array(repeating: "", count: 6)
     @State private var resendCooldown = 0
     @FocusState private var focusedIndex: Int?
-    @State private var resendTimer: Timer?
+    @State private var cooldownTask: Task<Void, Never>?
 
     var body: some View {
         VStack(spacing: 32) {
@@ -64,6 +64,7 @@ struct VerifyEmailView: View {
         .navigationTitle("Подтверждение")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { focusedIndex = 0 }
+        .onDisappear { cooldownTask?.cancel() }
     }
 
     private func handleDigitChange(index: Int, value: String) {
@@ -99,21 +100,22 @@ struct VerifyEmailView: View {
     private func resendCode() async {
         do {
             try await AuthService.shared.resendCode(email: email)
-            resendCooldown = 60
-            startCooldownTimer()
+            startCooldown()
         } catch {
             authViewModel.error = error.localizedDescription
         }
     }
 
-    private func startCooldownTimer() {
-        resendTimer?.invalidate()
-        resendTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            if resendCooldown > 0 {
-                resendCooldown -= 1
-            } else {
-                resendTimer?.invalidate()
+    private func startCooldown() {
+        cooldownTask?.cancel()
+        cooldownTask = Task {
+            for remaining in stride(from: 60, through: 1, by: -1) {
+                guard !Task.isCancelled else { return }
+                resendCooldown = remaining
+                try? await Task.sleep(for: .seconds(1))
             }
+            guard !Task.isCancelled else { return }
+            resendCooldown = 0
         }
     }
 }

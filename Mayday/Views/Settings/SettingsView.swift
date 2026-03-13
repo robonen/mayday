@@ -7,6 +7,7 @@ struct SettingsView: View {
     @State private var showChangePassword = false
     @State private var showSessions = false
     @State private var showLogoutAllConfirm = false
+    @State private var logoutAllError: String?
 
     var body: some View {
         NavigationStack {
@@ -81,11 +82,26 @@ struct SettingsView: View {
             ) {
                 Button("Выйти везде", role: .destructive) {
                     Task {
-                        _ = try? await NotificationsAPIService.shared.logoutAll()
-                        await authViewModel.logout()
+                        do {
+                            _ = try await NotificationsAPIService.shared.logoutAll()
+                            await authViewModel.logout()
+                        } catch {
+                            logoutAllError = error.localizedDescription
+                        }
                     }
                 }
                 Button("Отмена", role: .cancel) {}
+            }
+            .alert(
+                "Ошибка",
+                isPresented: Binding(
+                    get: { logoutAllError != nil },
+                    set: { if !$0 { logoutAllError = nil } }
+                )
+            ) {
+                Button("OK") { logoutAllError = nil }
+            } message: {
+                Text(logoutAllError ?? "")
             }
             .task {
                 await viewModel.loadSessions()

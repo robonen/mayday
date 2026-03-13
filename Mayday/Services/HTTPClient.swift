@@ -122,7 +122,8 @@ actor HTTPClient {
 
     private let baseURL: String
     private let keychain = KeychainService.shared
-    private var isRefreshing = false
+    // Single in-flight refresh task; concurrent 401s await this rather than racing.
+    private var refreshTask: Task<Void, Error>?
 
     private init() {
         #if DEBUG
@@ -133,8 +134,7 @@ actor HTTPClient {
     }
 
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        let response: T = try await performRequest(endpoint, retryOnUnauthorized: endpoint.requiresAuth)
-        return response
+        try await performRequest(endpoint, retryOnUnauthorized: endpoint.requiresAuth)
     }
 
     private func performRequest<T: Decodable>(_ endpoint: Endpoint, retryOnUnauthorized: Bool) async throws -> T {
@@ -160,7 +160,11 @@ actor HTTPClient {
                     urlRequest.url = components.url
                 }
             } else {
-                urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: body)
+                do {
+                    urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
+                } catch {
+                    throw APIError.networkError(error)
+                }
             }
         }
 
@@ -175,10 +179,12 @@ actor HTTPClient {
             throw APIError.networkError(URLError(.badServerResponse))
         }
 
-        if httpResponse.statusCode == 401 && retryOnUnauthorized && !isRefreshing {
-            isRefreshing = true
-            defer { isRefreshing = false }
-            try await refreshTokens()
+        if httpResponse.statusCode == 401 && retryOnUnauthorized {
+            do {
+                try await ensureTokenRefreshed()
+            } catch {
+                throw APIError.unauthorized
+            }
             return try await performRequest(endpoint, retryOnUnauthorized: false)
         }
 
@@ -210,15 +216,35 @@ actor HTTPClient {
         }
     }
 
-    private func refreshTokens() async throws {
+    /// Ensures tokens are refreshed exactly once even when multiple requests receive 401
+    /// concurrently. All callers await the same Task; only one network request is made.
+    private func ensureTokenRefreshed() async throws {
+        if let existing = refreshTask {
+            try await existing.value
+            return
+        }
+
         guard let refreshToken = keychain.loadRefreshToken() else {
+            keychain.clearTokens()
             throw APIError.unauthorized
         }
-        let response: TokenRefreshResponse = try await performRequest(
-            .refresh(refreshToken: refreshToken),
-            retryOnUnauthorized: false
-        )
-        try keychain.saveTokens(response.tokens)
+
+        let task = Task<Void, Error> {
+            let response: TokenRefreshResponse = try await self.performRequest(
+                .refresh(refreshToken: refreshToken),
+                retryOnUnauthorized: false
+            )
+            try self.keychain.saveTokens(response.tokens)
+        }
+        refreshTask = task
+        do {
+            try await task.value
+            refreshTask = nil
+        } catch {
+            refreshTask = nil
+            keychain.clearTokens()
+            throw error
+        }
     }
 }
 

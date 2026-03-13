@@ -104,7 +104,7 @@ struct NotificationRowView: View {
                 Text(notification.subject)
                     .font(.body)
                     .fontWeight(notification.isRead ? .regular : .semibold)
-                Text(notification.createdAt.relativeFormatted)
+                Text(notification.createdAt, style: .relative)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -113,16 +113,4 @@ struct NotificationRowView: View {
         }
         .padding(.vertical, 4)
     }
-}
-
-extension Date {
-    var relativeFormatted: String {
-        Date.relativeDateTimeFormatter.localizedString(for: self, relativeTo: Date())
-    }
-
-    private static let relativeDateTimeFormatter: RelativeDateTimeFormatter = {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        return formatter
-    }()
 }

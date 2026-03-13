@@ -52,9 +52,11 @@ actor AuthService {
     }
 
     func logout() async throws {
+        // Always clear local tokens, regardless of whether the network call succeeds,
+        // to avoid leaving a stale access token in Keychain.
+        defer { keychain.clearTokens() }
         guard let refreshToken = keychain.loadRefreshToken() else { return }
         let _: EmptyResponse = try await client.request(.logout(refreshToken: refreshToken))
-        keychain.clearTokens()
     }
 
     func getMe() async throws -> UserResponse {

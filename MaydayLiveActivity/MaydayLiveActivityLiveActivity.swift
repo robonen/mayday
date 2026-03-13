@@ -35,9 +35,13 @@ struct MaydayLiveActivityLiveActivity: Widget {
                         Spacer()
                         VStack(alignment: .trailing, spacing: 2) {
                             statusBadge(context.state.status)
-                            Text("Длит.: \(duration(from: context.state.startedAt))")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
+                            // Text(date, style: .timer) updates automatically without re-render.
+                            HStack(spacing: 2) {
+                                Text("Длит.:")
+                                Text(context.state.startedAt, style: .timer)
+                            }
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                         }
                     }
                     .padding(.horizontal)
@@ -77,7 +81,8 @@ struct MaydayLiveActivityLiveActivity: Widget {
                         .font(.caption)
                         .foregroundStyle(severityColor(context.attributes.severity))
                 }
-                Text(context.state.startedAt.relativeFormatted)
+                // Text(date, style: .relative) updates automatically without re-render.
+                Text(context.state.startedAt, style: .relative)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -92,8 +97,8 @@ struct MaydayLiveActivityLiveActivity: Widget {
     @ViewBuilder
     func statusBadge(_ status: AlertStatus) -> some View {
         let (text, color): (String, Color) = status == .active
-            ? ("active", .red)
-            : ("resolved", .green)
+            ? ("активен", .red)
+            : ("завершён", .green)
         Text(text)
             .font(.caption2.bold())
             .padding(.horizontal, 6)
@@ -110,26 +115,4 @@ struct MaydayLiveActivityLiveActivity: Widget {
         case .info: return .blue
         }
     }
-
-    func duration(from startDate: Date) -> String {
-        let interval = Date().timeIntervalSince(startDate)
-        let minutes = Int(interval / 60)
-        let hours = minutes / 60
-        if hours > 0 {
-            return "\(hours)ч \(minutes % 60)м"
-        }
-        return "\(minutes)м"
-    }
-}
-
-extension Date {
-    var relativeFormatted: String {
-        Date.relativeDateTimeFormatter.localizedString(for: self, relativeTo: Date())
-    }
-
-    private static let relativeDateTimeFormatter: RelativeDateTimeFormatter = {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        return formatter
-    }()
 }

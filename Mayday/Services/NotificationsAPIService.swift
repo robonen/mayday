@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 actor NotificationsAPIService {
     static let shared = NotificationsAPIService()
@@ -30,10 +29,6 @@ actor NotificationsAPIService {
 
     func changePassword(current: String, new: String) async throws -> UserResponse {
         try await client.request(.changePassword(current: current, new: new))
-    }
-
-    func updateAppBadge(_ count: Int) async {
-        await UIApplication.shared.setApplicationIconBadgeNumber(count)
     }
 }
 
