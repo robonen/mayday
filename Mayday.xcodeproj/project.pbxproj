@@ -1,0 +1,629 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA000001000001 /* MaydayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000001 /* MaydayApp.swift */; };
+		AA000001000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000002 /* ContentView.swift */; };
+		AA000001000003 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000003 /* AppDelegate.swift */; };
+		AA000001000004 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000004 /* User.swift */; };
+		AA000001000005 /* TokenPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000005 /* TokenPair.swift */; };
+		AA000001000006 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000006 /* AppNotification.swift */; };
+		AA000001000007 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000007 /* Session.swift */; };
+		AA000001000008 /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
+		AA000001000009 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000009 /* KeychainService.swift */; };
+		AA000001000010 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000010 /* HTTPClient.swift */; };
+		AA000001000011 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000011 /* AuthService.swift */; };
+		AA000001000012 /* NotificationsAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000012 /* NotificationsAPIService.swift */; };
+		AA000001000013 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000013 /* PushNotificationService.swift */; };
+		AA000001000014 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000014 /* AuthViewModel.swift */; };
+		AA000001000015 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000015 /* NotificationsViewModel.swift */; };
+		AA000001000016 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000016 /* SettingsViewModel.swift */; };
+		AA000001000017 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000017 /* LoginView.swift */; };
+		AA000001000018 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000018 /* RegisterView.swift */; };
+		AA000001000019 /* VerifyEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000019 /* VerifyEmailView.swift */; };
+		AA000001000020 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000020 /* NotificationsView.swift */; };
+		AA000001000021 /* NotificationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000021 /* NotificationDetailView.swift */; };
+		AA000001000022 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000022 /* SettingsView.swift */; };
+		AA000001000023 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000023 /* ChangePasswordView.swift */; };
+		AA000001000024 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000024 /* SessionsView.swift */; };
+		AA000001000025 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000025 /* Assets.xcassets */; };
+		AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000030 /* MaydayLiveActivityBundle.swift */; };
+		AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000031 /* MaydayLiveActivityLiveActivity.swift */; };
+		AA000001000032 /* AlertAttributes.swift in Sources (Extension) */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
+		AA000007000001 /* MaydayLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000008000001 /* MaydayLiveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA000003000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA000004000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA000005000002;
+			remoteInfo = MaydayLiveActivity;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA000006000001 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA000007000001 /* MaydayLiveActivity.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AA000002000001 /* MaydayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayApp.swift; sourceTree = "<group>"; };
+		AA000002000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AA000002000003 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AA000002000004 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		AA000002000005 /* TokenPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPair.swift; sourceTree = "<group>"; };
+		AA000002000006 /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
+		AA000002000007 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		AA000002000008 /* AlertAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertAttributes.swift; sourceTree = "<group>"; };
+		AA000002000009 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		AA000002000010 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		AA000002000011 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		AA000002000012 /* NotificationsAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsAPIService.swift; sourceTree = "<group>"; };
+		AA000002000013 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		AA000002000014 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		AA000002000015 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		AA000002000016 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		AA000002000017 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		AA000002000018 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		AA000002000019 /* VerifyEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmailView.swift; sourceTree = "<group>"; };
+		AA000002000020 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		AA000002000021 /* NotificationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailView.swift; sourceTree = "<group>"; };
+		AA000002000022 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA000002000023 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		AA000002000024 /* SessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsView.swift; sourceTree = "<group>"; };
+		AA000002000025 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA000002000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA000002000030 /* MaydayLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityBundle.swift; sourceTree = "<group>"; };
+		AA000002000031 /* MaydayLiveActivityLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityLiveActivity.swift; sourceTree = "<group>"; };
+		AA000002000033 /* Info.plist (Extension) */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA000008000001 /* MaydayLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MaydayLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA000009000001 /* Mayday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mayday.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA000010000001 /* Frameworks (App) */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000010000002 /* Frameworks (Extension) */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA000011000001 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				AA000011000002 /* Mayday */,
+				AA000011000010 /* MaydayLiveActivity */,
+				AA000011000099 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA000011000099 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA000009000001 /* Mayday.app */,
+				AA000008000001 /* MaydayLiveActivity.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA000011000002 /* Mayday */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000001 /* MaydayApp.swift */,
+				AA000002000002 /* ContentView.swift */,
+				AA000002000003 /* AppDelegate.swift */,
+				AA000002000025 /* Assets.xcassets */,
+				AA000002000026 /* Info.plist */,
+				AA000011000003 /* Models */,
+				AA000011000004 /* Services */,
+				AA000011000005 /* ViewModels */,
+				AA000011000006 /* Views */,
+			);
+			path = Mayday;
+			sourceTree = "<group>";
+		};
+		AA000011000003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000004 /* User.swift */,
+				AA000002000005 /* TokenPair.swift */,
+				AA000002000006 /* AppNotification.swift */,
+				AA000002000007 /* Session.swift */,
+				AA000002000008 /* AlertAttributes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AA000011000004 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000009 /* KeychainService.swift */,
+				AA000002000010 /* HTTPClient.swift */,
+				AA000002000011 /* AuthService.swift */,
+				AA000002000012 /* NotificationsAPIService.swift */,
+				AA000002000013 /* PushNotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AA000011000005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000014 /* AuthViewModel.swift */,
+				AA000002000015 /* NotificationsViewModel.swift */,
+				AA000002000016 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AA000011000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA000011000007 /* Auth */,
+				AA000011000008 /* Notifications */,
+				AA000011000009 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA000011000007 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000017 /* LoginView.swift */,
+				AA000002000018 /* RegisterView.swift */,
+				AA000002000019 /* VerifyEmailView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		AA000011000008 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000020 /* NotificationsView.swift */,
+				AA000002000021 /* NotificationDetailView.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		AA000011000009 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000022 /* SettingsView.swift */,
+				AA000002000023 /* ChangePasswordView.swift */,
+				AA000002000024 /* SessionsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		AA000011000010 /* MaydayLiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000030 /* MaydayLiveActivityBundle.swift */,
+				AA000002000031 /* MaydayLiveActivityLiveActivity.swift */,
+				AA000002000033 /* Info.plist (Extension) */,
+			);
+			path = MaydayLiveActivity;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA000005000001 /* Mayday */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA000012000001 /* Build configuration list for PBXNativeTarget "Mayday" */;
+			buildPhases = (
+				AA000013000001 /* Sources */,
+				AA000010000001 /* Frameworks */,
+				AA000014000001 /* Resources */,
+				AA000006000001 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA000015000001 /* PBXTargetDependency */,
+			);
+			name = Mayday;
+			productName = Mayday;
+			productReference = AA000009000001 /* Mayday.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AA000005000002 /* MaydayLiveActivity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA000012000002 /* Build configuration list for PBXNativeTarget "MaydayLiveActivity" */;
+			buildPhases = (
+				AA000013000002 /* Sources */,
+				AA000010000002 /* Frameworks */,
+				AA000014000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MaydayLiveActivity;
+			productName = MaydayLiveActivity;
+			productReference = AA000008000001 /* MaydayLiveActivity.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA000004000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					AA000005000001 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					AA000005000002 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = AA000012000003 /* Build configuration list for PBXProject "Mayday" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = ru;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				ru,
+				en,
+				Base,
+			);
+			mainGroup = AA000011000001 /* Root */;
+			productRefGroup = AA000011000099 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA000005000001 /* Mayday */,
+				AA000005000002 /* MaydayLiveActivity */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA000014000001 /* Resources (App) */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001000025 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000014000002 /* Resources (Extension) */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA000013000001 /* Sources (App) */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001000001 /* MaydayApp.swift in Sources */,
+				AA000001000002 /* ContentView.swift in Sources */,
+				AA000001000003 /* AppDelegate.swift in Sources */,
+				AA000001000004 /* User.swift in Sources */,
+				AA000001000005 /* TokenPair.swift in Sources */,
+				AA000001000006 /* AppNotification.swift in Sources */,
+				AA000001000007 /* Session.swift in Sources */,
+				AA000001000008 /* AlertAttributes.swift in Sources */,
+				AA000001000009 /* KeychainService.swift in Sources */,
+				AA000001000010 /* HTTPClient.swift in Sources */,
+				AA000001000011 /* AuthService.swift in Sources */,
+				AA000001000012 /* NotificationsAPIService.swift in Sources */,
+				AA000001000013 /* PushNotificationService.swift in Sources */,
+				AA000001000014 /* AuthViewModel.swift in Sources */,
+				AA000001000015 /* NotificationsViewModel.swift in Sources */,
+				AA000001000016 /* SettingsViewModel.swift in Sources */,
+				AA000001000017 /* LoginView.swift in Sources */,
+				AA000001000018 /* RegisterView.swift in Sources */,
+				AA000001000019 /* VerifyEmailView.swift in Sources */,
+				AA000001000020 /* NotificationsView.swift in Sources */,
+				AA000001000021 /* NotificationDetailView.swift in Sources */,
+				AA000001000022 /* SettingsView.swift in Sources */,
+				AA000001000023 /* ChangePasswordView.swift in Sources */,
+				AA000001000024 /* SessionsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA000013000002 /* Sources (Extension) */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */,
+				AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */,
+				AA000001000032 /* AlertAttributes.swift in Sources (Extension) */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA000015000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA000005000002 /* MaydayLiveActivity */;
+			targetProxy = AA000003000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AA000016000001 /* Debug (App) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Mayday/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.robonen.mayday";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA000016000002 /* Release (App) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Mayday/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.robonen.mayday";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AA000016000003 /* Debug (Extension) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MaydayLiveActivity/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.robonen.mayday.liveactivity";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AA000016000004 /* Release (Extension) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MaydayLiveActivity/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.robonen.mayday.liveactivity";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AA000016000005 /* Debug (Project) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLES = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA000016000006 /* Release (Project) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLES = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA000012000001 /* Build configuration list for PBXNativeTarget "Mayday" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA000016000001 /* Debug */,
+				AA000016000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA000012000002 /* Build configuration list for PBXNativeTarget "MaydayLiveActivity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA000016000003 /* Debug */,
+				AA000016000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA000012000003 /* Build configuration list for PBXProject "Mayday" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA000016000005 /* Debug */,
+				AA000016000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = AA000004000001 /* Project object */;
+}
