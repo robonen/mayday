@@ -124,8 +124,12 @@ struct MaydayLiveActivityLiveActivity: Widget {
 
 extension Date {
     var relativeFormatted: String {
+        Date.relativeDateTimeFormatter.localizedString(for: self, relativeTo: Date())
+    }
+
+    private static let relativeDateTimeFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
         formatter.locale = Locale(identifier: "ru_RU")
-        return formatter.localizedString(for: self, relativeTo: Date())
-    }
+        return formatter
+    }()
 }
