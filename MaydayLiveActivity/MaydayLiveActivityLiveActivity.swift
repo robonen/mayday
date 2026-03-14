@@ -1,153 +1,218 @@
 import ActivityKit
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 struct MaydayLiveActivityLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AlertAttributes.self) { context in
-            lockScreenView(context: context)
-                .activityBackgroundTint(severityColor(context.attributes.severity).opacity(0.12))
-                .activitySystemActionForegroundColor(.primary)
+            // MARK: - Lock Screen / Banner / StandBy
+
+            HStack(spacing: 12) {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(severityColor(context.attributes.severity))
+                    .frame(width: 4)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(context.attributes.topic)
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.secondary)
+
+                        Spacer()
+
+                        Text(context.state.startedAt, style: .relative)
+                            .font(.caption2)
+                            .monospacedDigit()
+                            .foregroundStyle(.tertiary)
+                            .contentTransition(.numericText(countsDown: false))
+                    }
+
+                    Text(context.state.title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .lineLimit(2)
+
+                    HStack(alignment: .firstTextBaseline) {
+                        if let value = context.state.value {
+                            Text(value)
+                                .font(.footnote)
+                                .fontWeight(.medium)
+                                .foregroundStyle(severityColor(context.attributes.severity))
+                                .contentTransition(.numericText())
+                        }
+
+                        Spacer()
+
+                        statusLabel(context.state.status)
+                    }
+                }
+            }
+            .padding(14)
+            .activityBackgroundTint(severityColor(context.attributes.severity).opacity(0.12))
+            .activitySystemActionForegroundColor(severityColor(context.attributes.severity))
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(context.attributes.severity.rawValue) alert: \(context.state.title)")
+
         } dynamicIsland: { context in
             DynamicIsland {
+                // MARK: - Expanded
+
                 DynamicIslandExpandedRegion(.leading) {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 5) {
                         Image(systemName: severityIcon(context.attributes.severity))
-                            .font(.caption)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(severityColor(context.attributes.severity))
+                            .fixedSize()
+
                         Text(context.attributes.topic)
-                            .font(.caption.bold())
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.white.opacity(0.7))
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: 90, alignment: .leading)
                     }
-                    .foregroundStyle(severityColor(context.attributes.severity))
+                    .padding(.leading, 4)
                 }
+
                 DynamicIslandExpandedRegion(.trailing) {
-                    statusBadge(context.state.status)
+                    Text(context.state.startedAt, style: .relative)
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .monospacedDigit()
+                        .foregroundStyle(.white.opacity(0.6))
+                        .contentTransition(.numericText(countsDown: false))
+                        .lineLimit(1)
+                        .multilineTextAlignment(.trailing)
+                        .padding(.trailing, 4)
                 }
-                DynamicIslandExpandedRegion(.bottom) {
-                    VStack(spacing: 8) {
+
+                DynamicIslandExpandedRegion(.bottom, priority: 1) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(context.state.title)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
+
                         HStack {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(context.state.title)
-                                    .font(.subheadline.bold())
-                                if let value = context.state.value {
-                                    Text(value)
-                                        .font(.caption)
-                                        .foregroundStyle(severityColor(context.attributes.severity))
-                                }
+                            if let value = context.state.value {
+                                Text(value)
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(severityColor(context.attributes.severity))
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        severityColor(context.attributes.severity).opacity(0.2),
+                                        in: ContainerRelativeShape()
+                                    )
+                                    .contentTransition(.numericText())
                             }
+
                             Spacer()
-                            VStack(alignment: .trailing, spacing: 3) {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "clock")
-                                        .font(.caption2)
-                                    Text(context.state.startedAt, style: .timer)
-                                        .font(.caption.monospacedDigit())
-                                }
-                                .foregroundStyle(.secondary)
-                                Text(context.state.startedAt.formatted(date: .omitted, time: .shortened))
-                                    .font(.caption2)
-                                    .foregroundStyle(.tertiary)
-                            }
+
+                            statusLabel(context.state.status)
                         }
                     }
                     .padding(.horizontal, 4)
+                    .padding(.bottom, 8)
                 }
+
             } compactLeading: {
-                Image(systemName: severityIcon(context.attributes.severity))
-                    .foregroundStyle(severityColor(context.attributes.severity))
+                // MARK: - Compact
+                HStack(spacing: 4) {
+                    Image(systemName: severityIcon(context.attributes.severity))
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundStyle(severityColor(context.attributes.severity))
+                        .fixedSize()
+
+                    Text(context.attributes.topic)
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.white.opacity(0.7))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: 70, alignment: .leading)
+                }
+                .padding(.leading, 4)
+
             } compactTrailing: {
-                let shortTopic = context.attributes.topic.components(separatedBy: "/").last ?? context.attributes.topic
-                let valueText = context.state.value.map { " · \($0)" } ?? ""
-                Text("\(shortTopic)\(valueText)")
+                Text(context.state.startedAt, style: .timer)
                     .font(.caption2)
-                    .lineLimit(1)
+                    .fontWeight(.medium)
+                    .monospacedDigit()
+                    .foregroundStyle(.white.opacity(0.8))
+                    .contentTransition(.numericText(countsDown: false))
+                    .frame(maxWidth: 40, alignment: .trailing)
+                    .padding(.trailing, 4)
+
             } minimal: {
                 Image(systemName: severityIcon(context.attributes.severity))
+                    .font(.caption2)
+                    .fontWeight(.bold)
                     .foregroundStyle(severityColor(context.attributes.severity))
             }
             .keylineTint(severityColor(context.attributes.severity))
         }
     }
+}
 
-    @ViewBuilder
-    func lockScreenView(context: ActivityViewContext<AlertAttributes>) -> some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .fill(severityColor(context.attributes.severity).opacity(0.15))
-                        .frame(width: 44, height: 44)
-                    Image(systemName: severityIcon(context.attributes.severity))
-                        .font(.title3)
-                        .foregroundStyle(severityColor(context.attributes.severity))
-                }
+// MARK: - Helpers
 
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(context.state.title)
-                        .font(.subheadline.bold())
-                    Text(context.attributes.topic)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                statusBadge(context.state.status)
-            }
-
-            HStack(spacing: 16) {
-                if let value = context.state.value {
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(severityColor(context.attributes.severity))
-                            .frame(width: 6, height: 6)
-                        Text(value)
-                            .font(.caption.bold())
-                            .foregroundStyle(severityColor(context.attributes.severity))
-                    }
-                }
-
-                Spacer()
-
-                HStack(spacing: 4) {
-                    Image(systemName: "clock")
-                        .font(.caption2)
-                    Text(context.state.startedAt, style: .relative)
-                        .font(.caption)
-                }
-                .foregroundStyle(.secondary)
-            }
-        }
-        .padding(16)
+private func severityColor(_ severity: Severity) -> Color {
+    switch severity {
+    case .critical: .red
+    case .warning: .orange
+    case .info: .cyan
     }
+}
 
-    @ViewBuilder
-    func statusBadge(_ status: AlertStatus) -> some View {
-        let (text, color): (String, Color) = status == .active
-            ? (String(localized: "alert_status_active"), .red)
-            : (String(localized: "alert_status_resolved"), .green)
-        Text(text)
-            .font(.caption2.bold())
-            .textCase(.uppercase)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color.opacity(0.15))
-            .foregroundStyle(color)
-            .clipShape(Capsule())
+private func severityIcon(_ severity: Severity) -> String {
+    switch severity {
+    case .critical: "exclamationmark.triangle.fill"
+    case .warning: "exclamationmark.circle.fill"
+    case .info: "info.circle.fill"
     }
+}
 
-    func severityColor(_ severity: Severity) -> Color {
-        switch severity {
-        case .critical: return .red
-        case .warning: return .orange
-        case .info: return .blue
-        }
-    }
+@ViewBuilder
+private func statusLabel(_ status: AlertStatus) -> some View {
+    HStack(spacing: 4) {
+        Circle()
+            .fill(status == .active ? Color.red : Color.green)
+            .frame(width: 5, height: 5)
 
-    func severityIcon(_ severity: Severity) -> String {
-        switch severity {
-        case .critical: return "flame.fill"
-        case .warning: return "exclamationmark.triangle.fill"
-        case .info: return "info.circle.fill"
-        }
+        Text(status == .active ? "Active" : "Resolved")
+            .font(.caption2)
+            .fontWeight(.semibold)
+            .foregroundStyle(status == .active ? .red : .green)
     }
+}
+
+#Preview("Live Activity", as: .content, using: AlertAttributes(
+    topic: "server-health",
+    alertId: "alert-001",
+    severity: .critical
+)) {
+    MaydayLiveActivityLiveActivity()
+} contentStates: {
+    AlertAttributes.ContentState(
+        title: "CPU Usage Exceeded 95%",
+        value: "Current: 97.3%",
+        status: .active,
+        startedAt: .now.addingTimeInterval(-300),
+        updatedAt: .now
+    )
+    AlertAttributes.ContentState(
+        title: "CPU Usage Normalized",
+        value: "Current: 42.1%",
+        status: .resolved,
+        startedAt: .now.addingTimeInterval(-600),
+        updatedAt: .now
+    )
 }

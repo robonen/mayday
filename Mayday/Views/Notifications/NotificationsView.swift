@@ -40,13 +40,14 @@ struct NotificationsView: View {
                 #if DEBUG
                 if PreviewData.isPreviewMode {
                     ToolbarItem(placement: .topBarLeading) {
-                        Text("demo_badge")
-                            .font(.caption2.bold())
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(.orange)
-                            .clipShape(Capsule())
+                        Button(action: {}) {
+                            Text("demo_badge")
+                                .font(.caption2.bold())
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.orange)
+                        .controlSize(.mini)
+                        .allowsHitTesting(false)
                     }
                 }
                 #endif
@@ -177,7 +178,7 @@ struct ActiveNotificationCard: View {
                     .foregroundStyle(Color.red)
                     .padding(.horizontal, 32)
                     .padding(.vertical, 10)
-                    .background(.white)
+                    .background(Color(.systemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 Spacer()
             }
@@ -245,7 +246,7 @@ struct ResolvedNotificationCard: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }

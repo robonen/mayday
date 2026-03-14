@@ -58,7 +58,7 @@ struct NotificationDetailView: View {
         VStack(spacing: 16) {
             ZStack {
                 Circle()
-                    .fill(.white)
+                    .fill(Color(.secondarySystemGroupedBackground))
                     .frame(width: 88, height: 88)
                     .shadow(color: topicColor.opacity(0.3), radius: 12, y: 4)
                 Circle()
@@ -115,7 +115,7 @@ struct NotificationDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(.white)
+        .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.04), radius: 6, y: 2)
     }
@@ -145,7 +145,7 @@ struct NotificationDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(.white)
+        .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.04), radius: 6, y: 2)
     }
@@ -186,7 +186,7 @@ struct NotificationDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(.white)
+        .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.04), radius: 6, y: 2)
     }

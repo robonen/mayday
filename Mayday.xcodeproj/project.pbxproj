@@ -38,6 +38,7 @@
 		AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000030 /* MaydayLiveActivityBundle.swift */; };
 		AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000031 /* MaydayLiveActivityLiveActivity.swift */; };
 		AA000001000032 /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
+		AA000001000033 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
 		AA000007000001 /* MaydayLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000008000001 /* MaydayLiveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -332,6 +333,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA000001000033 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,7 +448,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WA8SWY233K;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = MaydayLiveActivity/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -470,7 +472,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WA8SWY233K;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = MaydayLiveActivity/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;

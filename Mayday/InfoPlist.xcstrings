@@ -1,18 +1,31 @@
 {
   "sourceLanguage" : "ru",
   "strings" : {
-    "NSUserNotificationsUsageDescription" : {
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
       "localizations" : {
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mayday использует уведомления для оповещения о критических событиях."
+            "state" : "new",
+            "value" : "Mayday"
           }
-        },
+        }
+      }
+    },
+    "NSUserNotificationsUsageDescription" : {
+      "extractionState" : "stale",
+      "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mayday uses notifications to alert you about critical events."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mayday использует уведомления для оповещения о критических событиях."
           }
         }
       }
