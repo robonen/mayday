@@ -12,14 +12,14 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Аккаунт") {
+                Section("account_section") {
                     if let user = authViewModel.currentUser {
                         LabeledContent("Email", value: user.email)
                     }
                 }
 
                 Section {
-                    Button("Сменить пароль") {
+                    Button("change_password") {
                         showChangePassword = true
                     }
 
@@ -28,7 +28,7 @@ struct SettingsView: View {
                             UIApplication.shared.open(url)
                         }
                     } label: {
-                        Label("Push-уведомления", systemImage: "bell.badge")
+                        Label("push_notifications", systemImage: "bell.badge")
                             .foregroundStyle(.primary)
                     }
                 }
@@ -38,7 +38,7 @@ struct SettingsView: View {
                         showSessions = true
                     } label: {
                         HStack {
-                            Text("Активные сессии")
+                            Text("active_sessions")
                             Spacer()
                             if !viewModel.sessions.isEmpty {
                                 Text("(\(viewModel.sessions.count))")
@@ -52,20 +52,20 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Button("Выйти из аккаунта", role: .destructive) {
+                    Button("logout_button", role: .destructive) {
                         Task { await authViewModel.logout() }
                     }
 
-                    Button("Выйти на всех устройствах", role: .destructive) {
+                    Button("logout_all_button", role: .destructive) {
                         showLogoutAllConfirm = true
                     }
                 }
             }
-            .navigationTitle("Настройки")
+            .navigationTitle("settings_title")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Готово") { dismiss() }
+                    Button("done_button") { dismiss() }
                 }
             }
             .sheet(isPresented: $showChangePassword) {
@@ -76,11 +76,11 @@ struct SettingsView: View {
                     .environmentObject(viewModel)
             }
             .confirmationDialog(
-                "Выйти на всех устройствах?",
+                "logout_all_confirm",
                 isPresented: $showLogoutAllConfirm,
                 titleVisibility: .visible
             ) {
-                Button("Выйти везде", role: .destructive) {
+                Button("logout_all_action", role: .destructive) {
                     Task {
                         do {
                             _ = try await NotificationsAPIService.shared.logoutAll()
@@ -90,10 +90,10 @@ struct SettingsView: View {
                         }
                     }
                 }
-                Button("Отмена", role: .cancel) {}
+                Button("cancel", role: .cancel) {}
             }
             .alert(
-                "Ошибка",
+                "error_title",
                 isPresented: Binding(
                     get: { logoutAllError != nil },
                     set: { if !$0 { logoutAllError = nil } }

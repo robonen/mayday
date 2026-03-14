@@ -29,7 +29,7 @@ struct NotificationDetailView: View {
                     Button {
                         Task { await viewModel.markAsRead(notification) }
                     } label: {
-                        Text("Отметить прочитанным")
+                        Text("mark_as_read")
                             .font(.headline)
                             .foregroundStyle(.red)
                             .frame(maxWidth: .infinity)
@@ -45,7 +45,7 @@ struct NotificationDetailView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("Подробности")
+        .navigationTitle("details_section")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await viewModel.markAsRead(notification)
@@ -89,8 +89,8 @@ struct NotificationDetailView: View {
 
     private var statusBadge: some View {
         let (text, color): (String, Color) = notification.isRead
-            ? ("Прочитано", .green)
-            : ("Новое", .red)
+            ? (String(localized: "status_read"), .green)
+            : (String(localized: "status_new"), .red)
         return Text(text)
             .font(.caption.bold())
             .foregroundStyle(color)
@@ -104,7 +104,7 @@ struct NotificationDetailView: View {
 
     private var detailsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Подробности", systemImage: "doc.text.fill")
+            Label("details_section", systemImage: "doc.text.fill")
                 .font(.subheadline.bold())
                 .foregroundStyle(.primary)
 
@@ -124,7 +124,7 @@ struct NotificationDetailView: View {
 
     private func metadataCard(_ metadata: [String: String]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Информация", systemImage: "info.circle.fill")
+            Label("info_section", systemImage: "info.circle.fill")
                 .font(.subheadline.bold())
                 .foregroundStyle(.primary)
 
@@ -170,17 +170,17 @@ struct NotificationDetailView: View {
 
     private var statusCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Статус", systemImage: "clock.fill")
+            Label("status_section", systemImage: "clock.fill")
                 .font(.subheadline.bold())
                 .foregroundStyle(.primary)
 
             VStack(spacing: 8) {
-                infoRow(icon: "paperplane.fill", label: "Канал", value: channelLabel)
+                infoRow(icon: "paperplane.fill", label: String(localized: "channel_label"), value: channelLabel)
                 Divider()
-                infoRow(icon: "clock", label: "Получено", value: notification.createdAt.formatted(date: .abbreviated, time: .shortened))
+                infoRow(icon: "clock", label: String(localized: "received_label"), value: notification.createdAt.formatted(date: .abbreviated, time: .shortened))
                 if let readAt = notification.readAt {
                     Divider()
-                    infoRow(icon: "checkmark.circle.fill", label: "Прочитано", value: readAt.formatted(date: .abbreviated, time: .shortened))
+                    infoRow(icon: "checkmark.circle.fill", label: String(localized: "read_at_label"), value: readAt.formatted(date: .abbreviated, time: .shortened))
                 }
             }
         }
@@ -211,7 +211,7 @@ struct NotificationDetailView: View {
 
     private var channelLabel: String {
         switch notification.channel {
-        case .inApp: return "В приложении"
+        case .inApp: return String(localized: "channel_in_app")
         case .push: return "Push"
         case .email: return "Email"
         }

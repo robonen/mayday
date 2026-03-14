@@ -44,7 +44,7 @@ class SettingsViewModel: ObservableObject {
     func changePassword(current: String, new: String) async -> Bool {
         #if DEBUG
         if PreviewData.isPreviewMode {
-            successMessage = "Пароль успешно изменён"
+            successMessage = String(localized: "password_changed_success")
             return true
         }
         #endif
@@ -53,7 +53,7 @@ class SettingsViewModel: ObservableObject {
         defer { isLoading = false }
         do {
             _ = try await service.changePassword(current: current, new: new)
-            successMessage = "Пароль успешно изменён"
+            successMessage = String(localized: "password_changed_success")
             return true
         } catch {
             self.error = error.localizedDescription

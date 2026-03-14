@@ -123,8 +123,8 @@ struct MaydayLiveActivityLiveActivity: Widget {
     @ViewBuilder
     func statusBadge(_ status: AlertStatus) -> some View {
         let (text, color): (String, Color) = status == .active
-            ? ("активен", .red)
-            : ("завершён", .green)
+            ? (String(localized: "alert_status_active"), .red)
+            : (String(localized: "alert_status_resolved"), .green)
         Text(text)
             .font(.caption2.bold())
             .textCase(.uppercase)

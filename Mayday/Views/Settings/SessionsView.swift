@@ -14,7 +14,7 @@ struct SessionsView: View {
                                 .font(.body)
                                 .lineLimit(1)
                             if session.isCurrent {
-                                Text("Текущая")
+                                Text("current_session")
                                     .font(.caption)
                                     .padding(.horizontal, 6)
                                     .padding(.vertical, 2)
@@ -26,7 +26,7 @@ struct SessionsView: View {
                         Text(session.ipAddress)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text("Создана: \(session.createdAt.formatted(date: .abbreviated, time: .shortened))")
+                        Text("session_created \(session.createdAt.formatted(date: .abbreviated, time: .shortened))")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -35,17 +35,17 @@ struct SessionsView: View {
                             Button(role: .destructive) {
                                 Task { await viewModel.deleteSession(session) }
                             } label: {
-                                Label("Удалить", systemImage: "trash")
+                                Label("delete_button", systemImage: "trash")
                             }
                         }
                     }
                 }
             }
-            .navigationTitle("Активные сессии")
+            .navigationTitle("active_sessions_title")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Готово") { dismiss() }
+                    Button("done_button") { dismiss() }
                 }
             }
         }

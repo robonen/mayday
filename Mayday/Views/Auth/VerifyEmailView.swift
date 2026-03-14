@@ -14,9 +14,9 @@ struct VerifyEmailView: View {
             Spacer()
 
             VStack(spacing: 8) {
-                Text("Подтвердите email")
+                Text("verify_email_title")
                     .font(.largeTitle.bold())
-                Text("Код отправлен на")
+                Text("verify_code_sent_to")
                     .foregroundStyle(.secondary)
                 Text(email)
                     .fontWeight(.semibold)
@@ -51,9 +51,9 @@ struct VerifyEmailView: View {
                 Task { await resendCode() }
             } label: {
                 if resendCooldown > 0 {
-                    Text("Отправить повторно (\(resendCooldown) сек)")
+                    Text("verify_resend_cooldown \(resendCooldown)")
                 } else {
-                    Text("Отправить повторно")
+                    Text("verify_resend")
                 }
             }
             .disabled(resendCooldown > 0)
@@ -61,7 +61,7 @@ struct VerifyEmailView: View {
             Spacer()
         }
         .padding()
-        .navigationTitle("Подтверждение")
+        .navigationTitle("verify_nav_title")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { focusedIndex = 0 }
         .onDisappear { cooldownTask?.cancel() }

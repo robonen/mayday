@@ -1,0 +1,22 @@
+{
+  "sourceLanguage" : "ru",
+  "strings" : {
+    "NSUserNotificationsUsageDescription" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mayday использует уведомления для оповещения о критических событиях."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mayday uses notifications to alert you about critical events."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -20,27 +20,27 @@ struct NotificationsView: View {
                     ProgressView()
                 } else if let error = viewModel.error, viewModel.notifications.isEmpty {
                     ContentUnavailableView(
-                        "Ошибка загрузки",
+                        "loading_error",
                         systemImage: "exclamationmark.triangle",
                         description: Text(error)
                     )
                 } else if viewModel.notifications.isEmpty {
                     ContentUnavailableView(
-                        "Нет уведомлений",
+                        "no_notifications",
                         systemImage: "bell.slash",
-                        description: Text("Новые уведомления появятся здесь")
+                        description: Text("no_notifications_description")
                     )
                 } else {
                     notificationsList
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Уведомления")
+            .navigationTitle("notifications_title")
             .toolbar {
                 #if DEBUG
                 if PreviewData.isPreviewMode {
                     ToolbarItem(placement: .topBarLeading) {
-                        Text("ДЕМО")
+                        Text("demo_badge")
                             .font(.caption2.bold())
                             .foregroundStyle(.white)
                             .padding(.horizontal, 8)
@@ -80,7 +80,7 @@ struct NotificationsView: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 if !unreadNotifications.isEmpty {
-                    sectionHeader("Активные")
+                    sectionHeader(String(localized: "notifications_active"))
                     ForEach(unreadNotifications) { notification in
                         NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
                             ActiveNotificationCard(notification: notification)
@@ -97,7 +97,7 @@ struct NotificationsView: View {
                 }
 
                 if !readNotifications.isEmpty {
-                    sectionHeader("Завершённые")
+                    sectionHeader(String(localized: "notifications_completed"))
                     ForEach(readNotifications) { notification in
                         NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
                             ResolvedNotificationCard(notification: notification)
@@ -172,7 +172,7 @@ struct ActiveNotificationCard: View {
 
             HStack {
                 Spacer()
-                Text("Открыть")
+                Text("open_button")
                     .font(.subheadline.bold())
                     .foregroundStyle(Color.red)
                     .padding(.horizontal, 32)
@@ -238,7 +238,7 @@ struct ResolvedNotificationCard: View {
                     Image(systemName: "checkmark")
                         .font(.caption2)
                         .foregroundStyle(.green)
-                    Text("прочитано \(readAt.formatted(date: .abbreviated, time: .shortened))")
+                    Text("notification_read_at \(readAt.formatted(date: .abbreviated, time: .shortened))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

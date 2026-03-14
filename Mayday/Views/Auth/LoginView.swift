@@ -16,7 +16,7 @@ struct LoginView: View {
                         .foregroundStyle(.red)
                     Text("Mayday")
                         .font(.largeTitle.bold())
-                    Text("Мониторинг и уведомления")
+                    Text("login_subtitle")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -29,7 +29,7 @@ struct LoginView: View {
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
 
-                    SecureField("Пароль", text: $password)
+                    SecureField("password", text: $password)
                         .textFieldStyle(.roundedBorder)
                         .textContentType(.password)
                 }
@@ -48,14 +48,14 @@ struct LoginView: View {
                         ProgressView()
                             .frame(maxWidth: .infinity)
                     } else {
-                        Text("Войти")
+                        Text("login_button")
                             .frame(maxWidth: .infinity)
                     }
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(email.isEmpty || password.isEmpty || authViewModel.isLoading)
 
-                Button("Нет аккаунта? Зарегистрироваться") {
+                Button("login_no_account") {
                     showRegister = true
                 }
                 .font(.footnote)
@@ -64,7 +64,7 @@ struct LoginView: View {
                 Button {
                     Task { await authViewModel.enterPreviewMode() }
                 } label: {
-                    Label("Демо-режим", systemImage: "play.circle.fill")
+                    Label("demo_mode", systemImage: "play.circle.fill")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }

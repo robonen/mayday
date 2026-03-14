@@ -14,7 +14,7 @@ struct RegisterView: View {
         VStack(spacing: 24) {
             Spacer()
 
-            Text("Регистрация")
+            Text("register_title")
                 .font(.largeTitle.bold())
 
             VStack(spacing: 16) {
@@ -25,23 +25,23 @@ struct RegisterView: View {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
 
-                SecureField("Пароль", text: $password)
+                SecureField("password", text: $password)
                     .textFieldStyle(.roundedBorder)
                     .textContentType(.newPassword)
 
-                SecureField("Подтвердите пароль", text: $confirmPassword)
+                SecureField("confirm_password", text: $confirmPassword)
                     .textFieldStyle(.roundedBorder)
                     .textContentType(.newPassword)
             }
 
             if password.count > 0 && password.count < 8 {
-                Text("Пароль должен содержать не менее 8 символов")
+                Text("password_min_length")
                     .foregroundStyle(.red)
                     .font(.footnote)
             }
 
             if confirmPassword.count > 0 && password != confirmPassword {
-                Text("Пароли не совпадают")
+                Text("passwords_mismatch")
                     .foregroundStyle(.red)
                     .font(.footnote)
             }
@@ -65,13 +65,13 @@ struct RegisterView: View {
                 if authViewModel.isLoading {
                     ProgressView().frame(maxWidth: .infinity)
                 } else {
-                    Text("Создать аккаунт").frame(maxWidth: .infinity)
+                    Text("register_button").frame(maxWidth: .infinity)
                 }
             }
             .buttonStyle(.borderedProminent)
             .disabled(!isFormValid || authViewModel.isLoading)
 
-            Button("Уже есть аккаунт?") { dismiss() }
+            Button("register_has_account") { dismiss() }
                 .font(.footnote)
 
             Spacer()
@@ -80,7 +80,7 @@ struct RegisterView: View {
         .navigationDestination(isPresented: $showVerify) {
             VerifyEmailView(email: registeredEmail)
         }
-        .navigationTitle("Регистрация")
+        .navigationTitle("register_title")
         .navigationBarTitleDisplayMode(.inline)
     }
 

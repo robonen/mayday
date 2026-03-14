@@ -12,11 +12,11 @@ struct ChangePasswordView: View {
         NavigationStack {
             Form {
                 Section {
-                    SecureField("Текущий пароль", text: $currentPassword)
+                    SecureField("current_password", text: $currentPassword)
                         .textContentType(.password)
-                    SecureField("Новый пароль", text: $newPassword)
+                    SecureField("new_password", text: $newPassword)
                         .textContentType(.newPassword)
-                    SecureField("Подтвердите новый пароль", text: $confirmPassword)
+                    SecureField("confirm_new_password", text: $confirmPassword)
                         .textContentType(.newPassword)
                 }
 
@@ -33,7 +33,7 @@ struct ChangePasswordView: View {
                 }
 
                 Section {
-                    Button("Сохранить") {
+                    Button("save_button") {
                         Task {
                             let success = await viewModel.changePassword(current: currentPassword, new: newPassword)
                             if success { dismiss() }
@@ -43,11 +43,11 @@ struct ChangePasswordView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .navigationTitle("Сменить пароль")
+            .navigationTitle("change_password_title")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Отмена") { dismiss() }
+                    Button("cancel") { dismiss() }
                 }
             }
         }

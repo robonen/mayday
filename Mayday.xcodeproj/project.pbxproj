@@ -33,6 +33,8 @@
 		AA000001000024 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000024 /* SessionsView.swift */; };
 		AA000001000025 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000025 /* Assets.xcassets */; };
 		AA000001000026 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000026A /* PreviewData.swift */; };
+		AA000001000027 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
+		AA000001000028 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000028 /* InfoPlist.xcstrings */; };
 		AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000030 /* MaydayLiveActivityBundle.swift */; };
 		AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000031 /* MaydayLiveActivityLiveActivity.swift */; };
 		AA000001000032 /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
@@ -91,6 +93,8 @@
 		AA000002000025 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA000002000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA000002000026A /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
+		AA000002000027 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AA000002000028 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		AA000002000030 /* MaydayLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityBundle.swift; sourceTree = "<group>"; };
 		AA000002000031 /* MaydayLiveActivityLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityLiveActivity.swift; sourceTree = "<group>"; };
 		AA000002000033 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 				AA000002000003 /* AppDelegate.swift */,
 				AA000002000025 /* Assets.xcassets */,
 				AA000002000026 /* Info.plist */,
+				AA000002000027 /* Localizable.xcstrings */,
+				AA000002000028 /* InfoPlist.xcstrings */,
 				AA000011000003 /* Models */,
 				AA000011000004 /* Services */,
 				AA000011000005 /* ViewModels */,
@@ -317,6 +323,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA000001000025 /* Assets.xcassets in Resources */,
+				AA000001000027 /* Localizable.xcstrings in Resources */,
+				AA000001000028 /* InfoPlist.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,8 +10,8 @@ enum APIError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidURL: return "Invalid URL"
-        case .unauthorized: return "Неверный email или пароль"
+        case .invalidURL: return String(localized: "error_invalid_url")
+        case .unauthorized: return String(localized: "error_invalid_credentials")
         case .validationError(let errors):
             return errors.values.flatMap { $0 }.joined(separator: ", ")
         case .serverError(let message): return message

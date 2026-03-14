@@ -52,7 +52,5 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
-    <key>NSUserNotificationsUsageDescription</key>
-    <string>Mayday использует уведомления для оповещения о критических событиях.</string>
 </dict>
 </plist>
