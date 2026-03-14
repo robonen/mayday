@@ -146,15 +146,17 @@ struct ActiveNotificationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
-                NotificationIconView(topic: notification.topic, isActive: true)
+                NotificationIconView(source: notification.source, isActive: true)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(notification.subject)
+                    Text(notification.subject ?? "")
                         .font(.headline)
                         .foregroundStyle(.white)
-                    Text(notification.topic)
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.8))
+                    if let source = notification.source {
+                        Text(source)
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.8))
+                    }
                 }
 
                 Spacer()
@@ -204,15 +206,17 @@ struct ResolvedNotificationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top) {
-                NotificationIconView(topic: notification.topic, isActive: false)
+                NotificationIconView(source: notification.source, isActive: false)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(notification.subject)
+                    Text(notification.subject ?? "")
                         .font(.headline)
                         .foregroundStyle(.primary)
-                    Text(notification.topic)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    if let source = notification.source {
+                        Text(source)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Spacer()
@@ -255,11 +259,11 @@ struct ResolvedNotificationCard: View {
 // MARK: - Notification Icon
 
 struct NotificationIconView: View {
-    let topic: String
+    let source: String?
     let isActive: Bool
 
     private var iconName: String {
-        let lowered = topic.lowercased()
+        let lowered = (source ?? "").lowercased()
         if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
             return "flame.fill"
         } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
@@ -274,7 +278,7 @@ struct NotificationIconView: View {
     }
 
     private var iconColor: Color {
-        let lowered = topic.lowercased()
+        let lowered = (source ?? "").lowercased()
         if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
             return .red
         } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {

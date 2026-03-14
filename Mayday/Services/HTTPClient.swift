@@ -30,6 +30,11 @@ struct APIErrorResponse: Decodable {
     let errors: [String: [String]]?
 }
 
+enum APIService {
+    case sso
+    case notification
+}
+
 enum Endpoint {
     // Auth
     case login(email: String, password: String)
@@ -45,11 +50,28 @@ enum Endpoint {
     case logoutAll
     case changePassword(current: String, new: String)
     // Notifications
-    case getNotifications(page: Int, perPage: Int)
+    case getNotifications(limit: Int, offset: Int, unreadOnly: Bool, scope: String?)
     case markAsRead(id: UUID)
+    case markAllAsRead(scope: String?)
     // Devices
-    case registerDevice(token: String)
-    case unregisterDevice(token: String)
+    case listDevices
+    case registerDevice(token: String, platform: String)
+    case unregisterDevice(id: UUID)
+    // Preferences
+    case getPreferences
+    case upsertPreference(channel: String, enabled: Bool, config: [String: String]?)
+
+    var service: APIService {
+        switch self {
+        case .login, .register, .verifyEmail, .resendCode, .refresh, .logout,
+             .getMe, .getSessions, .deleteSession, .logoutAll, .changePassword:
+            return .sso
+        case .getNotifications, .markAsRead, .markAllAsRead,
+             .listDevices, .registerDevice, .unregisterDevice,
+             .getPreferences, .upsertPreference:
+            return .notification
+        }
+    }
 
     var path: String {
         switch self {
@@ -66,17 +88,25 @@ enum Endpoint {
         case .changePassword: return "/users/me/change-password"
         case .getNotifications: return "/notifications"
         case .markAsRead(let id): return "/notifications/\(id.uuidString)/read"
-        case .registerDevice: return "/devices/register"
-        case .unregisterDevice: return "/devices/unregister"
+        case .markAllAsRead: return "/notifications/read-all"
+        case .listDevices: return "/devices"
+        case .registerDevice: return "/devices"
+        case .unregisterDevice(let id): return "/devices/\(id.uuidString)"
+        case .getPreferences: return "/preferences"
+        case .upsertPreference: return "/preferences"
         }
     }
 
     var method: String {
         switch self {
-        case .getMe, .getSessions, .getNotifications: return "GET"
-        case .deleteSession: return "DELETE"
-        case .markAsRead: return "PATCH"
-        default: return "POST"
+        case .getMe, .getSessions, .getNotifications, .listDevices, .getPreferences:
+            return "GET"
+        case .deleteSession, .unregisterDevice:
+            return "DELETE"
+        case .upsertPreference:
+            return "PUT"
+        default:
+            return "POST"
         }
     }
 
@@ -105,12 +135,20 @@ enum Endpoint {
             return ["refresh_token": token]
         case .changePassword(let current, let new):
             return ["current_password": current, "new_password": new]
-        case .registerDevice(let token):
-            return ["token": token, "platform": "ios"]
-        case .unregisterDevice(let token):
-            return ["token": token]
-        case .getNotifications(let page, let perPage):
-            return ["page": page, "per_page": perPage]
+        case .registerDevice(let token, let platform):
+            return ["token": token, "platform": platform]
+        case .getNotifications(let limit, let offset, let unreadOnly, let scope):
+            var params: [String: Any] = ["limit": limit, "offset": offset]
+            if unreadOnly { params["unread_only"] = true }
+            if let scope { params["scope"] = scope }
+            return params
+        case .markAllAsRead(let scope):
+            if let scope { return ["scope": scope] }
+            return nil
+        case .upsertPreference(let channel, let enabled, let config):
+            var params: [String: Any] = ["channel": channel, "enabled": enabled]
+            if let config { params["config"] = config }
+            return params
         default:
             return nil
         }
@@ -120,17 +158,27 @@ enum Endpoint {
 actor HTTPClient {
     static let shared = HTTPClient()
 
-    private let baseURL: String
+    private let ssoBaseURL: String
+    private let notificationBaseURL: String
     private let keychain = KeychainService.shared
     // Single in-flight refresh task; concurrent 401s await this rather than racing.
     private var refreshTask: Task<Void, Error>?
 
     private init() {
         #if DEBUG
-        baseURL = "http://localhost:8081"
+        ssoBaseURL = "http://localhost:8081"
+        notificationBaseURL = "http://localhost:8092"
         #else
-        baseURL = "https://api.chemodan.example/sso"
+        ssoBaseURL = "https://id.robonen.ru"
+        notificationBaseURL = "https://notify.robonen.ru"
         #endif
+    }
+
+    private func baseURL(for service: APIService) -> String {
+        switch service {
+        case .sso: return ssoBaseURL
+        case .notification: return notificationBaseURL
+        }
     }
 
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
@@ -138,7 +186,7 @@ actor HTTPClient {
     }
 
     private func performRequest<T: Decodable>(_ endpoint: Endpoint, retryOnUnauthorized: Bool) async throws -> T {
-        guard let url = URL(string: baseURL + endpoint.path) else {
+        guard let url = URL(string: baseURL(for: endpoint.service) + endpoint.path) else {
             throw APIError.invalidURL
         }
 

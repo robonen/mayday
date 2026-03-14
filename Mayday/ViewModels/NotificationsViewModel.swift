@@ -5,14 +5,15 @@ import UIKit
 @MainActor
 class NotificationsViewModel: ObservableObject {
     @Published var notifications: [AppNotification] = []
+    @Published var unreadCount = 0
     @Published var isLoading = false
     @Published var isLoadingMore = false
     @Published var error: String?
     @Published var hasMore = true
 
     private let service = NotificationsAPIService.shared
-    private var currentPage = 1
-    private let perPage = 20
+    private let limit = 50
+    private var currentOffset = 0
     private var pollingTask: Task<Void, Never>?
 
     func load() async {
@@ -25,12 +26,13 @@ class NotificationsViewModel: ObservableObject {
         #endif
         isLoading = true
         error = nil
-        currentPage = 1
+        currentOffset = 0
         defer { isLoading = false }
         do {
-            let page = try await service.getNotifications(page: 1, perPage: perPage)
-            notifications = page.items
-            hasMore = page.items.count == perPage
+            let page = try await service.getNotifications(limit: limit, offset: 0)
+            notifications = page.notifications
+            unreadCount = page.unreadCount
+            hasMore = notifications.count < page.total
             updateBadge()
         } catch {
             self.error = error.localizedDescription
@@ -45,11 +47,12 @@ class NotificationsViewModel: ObservableObject {
         isLoadingMore = true
         defer { isLoadingMore = false }
         do {
-            let nextPage = currentPage + 1
-            let page = try await service.getNotifications(page: nextPage, perPage: perPage)
-            notifications.append(contentsOf: page.items)
-            currentPage = nextPage
-            hasMore = page.items.count == perPage
+            let nextOffset = notifications.count
+            let page = try await service.getNotifications(limit: limit, offset: nextOffset)
+            notifications.append(contentsOf: page.notifications)
+            unreadCount = page.unreadCount
+            currentOffset = nextOffset
+            hasMore = notifications.count < page.total
         } catch {
             self.error = error.localizedDescription
         }
@@ -60,19 +63,7 @@ class NotificationsViewModel: ObservableObject {
         #if DEBUG
         if PreviewData.isPreviewMode {
             if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-                let updated = AppNotification(
-                    id: notification.id,
-                    topic: notification.topic,
-                    subject: notification.subject,
-                    body: notification.body,
-                    metadata: notification.metadata,
-                    status: .read,
-                    channel: notification.channel,
-                    readAt: Date(),
-                    createdAt: notification.createdAt,
-                    updatedAt: Date()
-                )
-                notifications[index] = updated
+                notifications[index] = notification.withReadAt(Date())
             }
             return
         }
@@ -80,21 +71,21 @@ class NotificationsViewModel: ObservableObject {
         do {
             try await service.markAsRead(id: notification.id)
             if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-                let updated = AppNotification(
-                    id: notification.id,
-                    topic: notification.topic,
-                    subject: notification.subject,
-                    body: notification.body,
-                    metadata: notification.metadata,
-                    status: .read,
-                    channel: notification.channel,
-                    readAt: Date(),
-                    createdAt: notification.createdAt,
-                    updatedAt: Date()
-                )
-                notifications[index] = updated
+                notifications[index] = notification.withReadAt(Date())
             }
             updateBadge()
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
+    func markAllAsRead() async {
+        #if DEBUG
+        if PreviewData.isPreviewMode { return }
+        #endif
+        do {
+            try await service.markAllAsRead()
+            await load()
         } catch {
             self.error = error.localizedDescription
         }
@@ -104,7 +95,6 @@ class NotificationsViewModel: ObservableObject {
         #if DEBUG
         if PreviewData.isPreviewMode { return }
         #endif
-        // Guard against starting a second polling loop if already running.
         guard pollingTask == nil else { return }
         pollingTask = Task {
             while !Task.isCancelled {
@@ -121,7 +111,6 @@ class NotificationsViewModel: ObservableObject {
     }
 
     private func updateBadge() {
-        let unreadCount = notifications.filter { !$0.isRead }.count
         UNUserNotificationCenter.current().setBadgeCount(unreadCount)
     }
 }

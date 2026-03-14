@@ -32,7 +32,7 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
         let token = tokenData.map { String(format: "%02.2hhx", $0) }.joined()
         deviceToken = token
         Task {
-            try? await HTTPClient.shared.request(.registerDevice(token: token)) as EmptyResponse
+            try? await HTTPClient.shared.request(.registerDevice(token: token, platform: "ios")) as DeviceToken
         }
     }
 

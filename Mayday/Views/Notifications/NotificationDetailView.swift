@@ -70,7 +70,7 @@ struct NotificationDetailView: View {
             }
 
             VStack(spacing: 6) {
-                Text(notification.subject)
+                Text(notification.subject ?? "")
                     .font(.title3.bold())
                     .multilineTextAlignment(.center)
 
@@ -212,13 +212,15 @@ struct NotificationDetailView: View {
     private var channelLabel: String {
         switch notification.channel {
         case .inApp: return String(localized: "channel_in_app")
-        case .push: return "Push"
+        case .apns: return "Push"
         case .email: return "Email"
+        case .telegram: return "Telegram"
+        case .webhook: return "Webhook"
         }
     }
 
     private var topicIcon: String {
-        let lowered = notification.topic.lowercased()
+        let lowered = (notification.source ?? "").lowercased()
         if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
             return "flame.fill"
         } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
@@ -233,7 +235,7 @@ struct NotificationDetailView: View {
     }
 
     private var topicColor: Color {
-        let lowered = notification.topic.lowercased()
+        let lowered = (notification.source ?? "").lowercased()
         if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
             return .red
         } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
