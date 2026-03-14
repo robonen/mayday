@@ -12,6 +12,13 @@ class AuthViewModel: ObservableObject {
     private let keychain = KeychainService.shared
 
     func checkAuthStatus() async {
+        #if DEBUG
+        if PreviewData.isPreviewMode {
+            currentUser = PreviewData.mockUser
+            isAuthenticated = true
+            return
+        }
+        #endif
         guard keychain.loadAccessToken() != nil else {
             isAuthenticated = false
             return
@@ -28,6 +35,15 @@ class AuthViewModel: ObservableObject {
             isAuthenticated = false
         }
     }
+
+    #if DEBUG
+    func enterPreviewMode() async {
+        PreviewData.isPreviewMode = true
+        currentUser = PreviewData.mockUser
+        isAuthenticated = true
+        await PreviewData.startMockLiveActivity()
+    }
+    #endif
 
     func login(email: String, password: String) async {
         isLoading = true
@@ -68,6 +84,15 @@ class AuthViewModel: ObservableObject {
     }
 
     func logout() async {
+        #if DEBUG
+        if PreviewData.isPreviewMode {
+            await PreviewData.stopMockLiveActivity()
+            PreviewData.isPreviewMode = false
+            isAuthenticated = false
+            currentUser = nil
+            return
+        }
+        #endif
         isLoading = true
         defer { isLoading = false }
         do {

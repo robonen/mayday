@@ -5,6 +5,14 @@ struct NotificationsView: View {
     @StateObject private var viewModel = NotificationsViewModel()
     @State private var showSettings = false
 
+    private var unreadNotifications: [AppNotification] {
+        viewModel.notifications.filter { !$0.isRead }
+    }
+
+    private var readNotifications: [AppNotification] {
+        viewModel.notifications.filter { $0.isRead }
+    }
+
     var body: some View {
         NavigationStack {
             Group {
@@ -26,13 +34,28 @@ struct NotificationsView: View {
                     notificationsList
                 }
             }
+            .background(Color(.systemGroupedBackground))
             .navigationTitle("Уведомления")
             .toolbar {
+                #if DEBUG
+                if PreviewData.isPreviewMode {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Text("ДЕМО")
+                            .font(.caption2.bold())
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(.orange)
+                            .clipShape(Capsule())
+                    }
+                }
+                #endif
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showSettings = true
                     } label: {
-                        Image(systemName: "gear")
+                        Image(systemName: "gearshape.fill")
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -54,63 +77,224 @@ struct NotificationsView: View {
     }
 
     var notificationsList: some View {
-        List {
-            ForEach(viewModel.notifications) { notification in
-                NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
-                    NotificationRowView(notification: notification)
-                }
-                .swipeActions(edge: .leading) {
-                    if !notification.isRead {
-                        Button {
-                            Task { await viewModel.markAsRead(notification) }
-                        } label: {
-                            Label("Прочитано", systemImage: "checkmark")
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                if !unreadNotifications.isEmpty {
+                    sectionHeader("Активные")
+                    ForEach(unreadNotifications) { notification in
+                        NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
+                            ActiveNotificationCard(notification: notification)
                         }
-                        .tint(.blue)
+                        .buttonStyle(.plain)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 12)
+                        .onAppear {
+                            if notification.id == viewModel.notifications.last?.id {
+                                Task { await viewModel.loadMore() }
+                            }
+                        }
                     }
                 }
-                .onAppear {
-                    if notification.id == viewModel.notifications.last?.id {
-                        Task { await viewModel.loadMore() }
-                    }
-                }
-            }
 
-            if viewModel.isLoadingMore {
-                HStack {
-                    Spacer()
+                if !readNotifications.isEmpty {
+                    sectionHeader("Завершённые")
+                    ForEach(readNotifications) { notification in
+                        NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
+                            ResolvedNotificationCard(notification: notification)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 12)
+                        .onAppear {
+                            if notification.id == viewModel.notifications.last?.id {
+                                Task { await viewModel.loadMore() }
+                            }
+                        }
+                    }
+                }
+
+                if viewModel.isLoadingMore {
                     ProgressView()
-                    Spacer()
+                        .padding(.vertical, 20)
                 }
             }
+            .padding(.top, 4)
         }
-        .listStyle(.plain)
+    }
+
+    func sectionHeader(_ title: String) -> some View {
+        HStack {
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 16)
+        .padding(.bottom, 8)
     }
 }
 
-struct NotificationRowView: View {
+// MARK: - Active (Unread) Card
+
+struct ActiveNotificationCard: View {
     let notification: AppNotification
 
     var body: some View {
-        HStack(spacing: 12) {
-            Circle()
-                .fill(notification.isRead ? Color.clear : Color.blue)
-                .frame(width: 8, height: 8)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                NotificationIconView(topic: notification.topic, isActive: true)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(notification.topic)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text(notification.subject)
-                    .font(.body)
-                    .fontWeight(notification.isRead ? .regular : .semibold)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(notification.subject)
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                    Text(notification.topic)
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.8))
+                }
+
+                Spacer()
+
                 Text(notification.createdAt, style: .relative)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.white.opacity(0.7))
             }
 
-            Spacer()
+            if !notification.body.isEmpty {
+                Text(notification.body)
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.85))
+                    .lineLimit(2)
+            }
+
+            HStack {
+                Spacer()
+                Text("Открыть")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(Color.red)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 10)
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                Spacer()
+            }
         }
-        .padding(.vertical, 4)
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [Color.red, Color.red.opacity(0.85)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .red.opacity(0.3), radius: 8, y: 4)
+    }
+}
+
+// MARK: - Resolved (Read) Card
+
+struct ResolvedNotificationCard: View {
+    let notification: AppNotification
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top) {
+                NotificationIconView(topic: notification.topic, isActive: false)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(notification.subject)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text(notification.topic)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(notification.createdAt.formatted(date: .abbreviated, time: .omitted))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(notification.createdAt.formatted(date: .omitted, time: .shortened))
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+
+            if !notification.body.isEmpty {
+                Text(notification.body)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+
+            if let readAt = notification.readAt {
+                HStack(spacing: 4) {
+                    Image(systemName: "checkmark")
+                        .font(.caption2)
+                        .foregroundStyle(.green)
+                    Text("прочитано \(readAt.formatted(date: .abbreviated, time: .shortened))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(16)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+    }
+}
+
+// MARK: - Notification Icon
+
+struct NotificationIconView: View {
+    let topic: String
+    let isActive: Bool
+
+    private var iconName: String {
+        let lowered = topic.lowercased()
+        if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
+            return "flame.fill"
+        } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
+            return "heart.fill"
+        } else if lowered.contains("security") || lowered.contains("безопас") {
+            return "shield.fill"
+        } else if lowered.contains("water") || lowered.contains("вод") || lowered.contains("затоп") {
+            return "drop.fill"
+        } else {
+            return "exclamationmark.triangle.fill"
+        }
+    }
+
+    private var iconColor: Color {
+        let lowered = topic.lowercased()
+        if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
+            return .red
+        } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
+            return .green
+        } else if lowered.contains("security") || lowered.contains("безопас") {
+            return .blue
+        } else if lowered.contains("water") || lowered.contains("вод") || lowered.contains("затоп") {
+            return .cyan
+        } else {
+            return .orange
+        }
+    }
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(isActive ? .white.opacity(0.25) : iconColor.opacity(0.12))
+                .frame(width: 40, height: 40)
+            Image(systemName: iconName)
+                .font(.body)
+                .foregroundStyle(isActive ? .white : iconColor)
+        }
     }
 }

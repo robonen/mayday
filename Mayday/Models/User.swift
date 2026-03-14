@@ -1,6 +1,6 @@
 import Foundation
 
-struct UserResponse: Codable, Identifiable {
+struct UserResponse: Codable, Identifiable, Sendable {
     let id: UUID
     let email: String
     let status: UserStatus
@@ -18,7 +18,7 @@ struct UserResponse: Codable, Identifiable {
     }
 }
 
-enum UserStatus: String, Codable {
+enum UserStatus: String, Codable, Sendable {
     case pending
     case active
     case suspended
@@ -26,7 +26,7 @@ enum UserStatus: String, Codable {
 }
 
 // Helper for Any JSON values
-struct AnyCodable: Codable {
+struct AnyCodable: Codable, @unchecked Sendable {
     let value: Any
 
     init(_ value: Any) {

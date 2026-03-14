@@ -1,11 +1,11 @@
 import Foundation
 
-struct LoginResponse: Decodable {
+struct LoginResponse: Decodable, Sendable {
     let user: UserResponse
     let tokens: TokenPair
 }
 
-struct RegisterResponse: Decodable {
+struct RegisterResponse: Decodable, Sendable {
     let user: UserResponse
     
     private enum CodingKeys: String, CodingKey {
@@ -20,7 +20,7 @@ struct RegisterResponse: Decodable {
     }
 }
 
-struct VerifyEmailResponse: Decodable {
+struct VerifyEmailResponse: Decodable, Sendable {
     let user: UserResponse
 }
 
@@ -64,8 +64,8 @@ actor AuthService {
     }
 }
 
-struct ResendCodeResponse: Decodable {
+struct ResendCodeResponse: Decodable, Sendable {
     let message: String
 }
 
-struct EmptyResponse: Decodable {}
+struct EmptyResponse: Decodable, Sendable {}

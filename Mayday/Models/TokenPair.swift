@@ -1,6 +1,6 @@
 import Foundation
 
-struct TokenPair: Codable {
+struct TokenPair: Codable, Sendable {
     let accessToken: String
     let refreshToken: String
     let expiresAt: Date

@@ -1,6 +1,6 @@
 import Foundation
 
-struct SessionResponse: Codable, Identifiable {
+struct SessionResponse: Codable, Identifiable, Sendable {
     let id: UUID
     let userAgent: String
     let ipAddress: String

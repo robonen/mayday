@@ -60,6 +60,17 @@ struct LoginView: View {
                 }
                 .font(.footnote)
 
+                #if DEBUG
+                Button {
+                    Task { await authViewModel.enterPreviewMode() }
+                } label: {
+                    Label("Демо-режим", systemImage: "play.circle.fill")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.top, 8)
+                #endif
+
                 Spacer()
             }
             .padding()

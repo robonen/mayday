@@ -1,6 +1,6 @@
 import Foundation
 
-struct AppNotification: Codable, Identifiable {
+struct AppNotification: Codable, Identifiable, Sendable {
     let id: UUID
     let topic: String
     let subject: String
@@ -22,19 +22,19 @@ struct AppNotification: Codable, Identifiable {
     var isRead: Bool { readAt != nil }
 }
 
-enum NotificationStatus: String, Codable {
+enum NotificationStatus: String, Codable, Sendable {
     case sent
     case delivered
     case read
 }
 
-enum NotificationChannel: String, Codable {
+enum NotificationChannel: String, Codable, Sendable {
     case inApp = "in_app"
     case push
     case email
 }
 
-struct NotificationsPage: Codable {
+struct NotificationsPage: Codable, Sendable {
     let items: [AppNotification]
     let total: Int
     let page: Int

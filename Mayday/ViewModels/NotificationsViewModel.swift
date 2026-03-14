@@ -16,6 +16,13 @@ class NotificationsViewModel: ObservableObject {
     private var pollingTask: Task<Void, Never>?
 
     func load() async {
+        #if DEBUG
+        if PreviewData.isPreviewMode {
+            notifications = PreviewData.mockNotifications
+            hasMore = false
+            return
+        }
+        #endif
         isLoading = true
         error = nil
         currentPage = 1
@@ -31,6 +38,9 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func loadMore() async {
+        #if DEBUG
+        if PreviewData.isPreviewMode { return }
+        #endif
         guard !isLoadingMore && hasMore else { return }
         isLoadingMore = true
         defer { isLoadingMore = false }
@@ -47,6 +57,26 @@ class NotificationsViewModel: ObservableObject {
 
     func markAsRead(_ notification: AppNotification) async {
         guard !notification.isRead else { return }
+        #if DEBUG
+        if PreviewData.isPreviewMode {
+            if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
+                let updated = AppNotification(
+                    id: notification.id,
+                    topic: notification.topic,
+                    subject: notification.subject,
+                    body: notification.body,
+                    metadata: notification.metadata,
+                    status: .read,
+                    channel: notification.channel,
+                    readAt: Date(),
+                    createdAt: notification.createdAt,
+                    updatedAt: Date()
+                )
+                notifications[index] = updated
+            }
+            return
+        }
+        #endif
         do {
             try await service.markAsRead(id: notification.id)
             if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
@@ -71,6 +101,9 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func startPolling() {
+        #if DEBUG
+        if PreviewData.isPreviewMode { return }
+        #endif
         // Guard against starting a second polling loop if already running.
         guard pollingTask == nil else { return }
         pollingTask = Task {
@@ -89,6 +122,6 @@ class NotificationsViewModel: ObservableObject {
 
     private func updateBadge() {
         let unreadCount = notifications.filter { !$0.isRead }.count
-        UIApplication.shared.applicationIconBadgeNumber = unreadCount
+        UNUserNotificationCenter.current().setBadgeCount(unreadCount)
     }
 }

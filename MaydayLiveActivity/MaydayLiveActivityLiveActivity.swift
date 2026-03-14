@@ -5,49 +5,54 @@ import SwiftUI
 struct MaydayLiveActivityLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AlertAttributes.self) { context in
-            // Lock Screen / Notification Center
             lockScreenView(context: context)
-                .activityBackgroundTint(severityColor(context.attributes.severity).opacity(0.15))
+                .activityBackgroundTint(severityColor(context.attributes.severity).opacity(0.12))
                 .activitySystemActionForegroundColor(.primary)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label(context.attributes.topic, systemImage: "exclamationmark.triangle.fill")
-                        .font(.caption)
-                        .foregroundStyle(severityColor(context.attributes.severity))
+                    HStack(spacing: 6) {
+                        Image(systemName: severityIcon(context.attributes.severity))
+                            .font(.caption)
+                        Text(context.attributes.topic)
+                            .font(.caption.bold())
+                    }
+                    .foregroundStyle(severityColor(context.attributes.severity))
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    if let value = context.state.value {
-                        Text(value)
-                            .font(.caption.bold())
-                            .foregroundStyle(severityColor(context.attributes.severity))
-                    }
+                    statusBadge(context.state.status)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(context.state.title)
-                                .font(.subheadline.bold())
-                            Text("Начало: \(context.state.startedAt.formatted(date: .omitted, time: .shortened))")
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 2) {
-                            statusBadge(context.state.status)
-                            // Text(date, style: .timer) updates automatically without re-render.
-                            HStack(spacing: 2) {
-                                Text("Длит.:")
-                                Text(context.state.startedAt, style: .timer)
+                    VStack(spacing: 8) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(context.state.title)
+                                    .font(.subheadline.bold())
+                                if let value = context.state.value {
+                                    Text(value)
+                                        .font(.caption)
+                                        .foregroundStyle(severityColor(context.attributes.severity))
+                                }
                             }
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            Spacer()
+                            VStack(alignment: .trailing, spacing: 3) {
+                                HStack(spacing: 3) {
+                                    Image(systemName: "clock")
+                                        .font(.caption2)
+                                    Text(context.state.startedAt, style: .timer)
+                                        .font(.caption.monospacedDigit())
+                                }
+                                .foregroundStyle(.secondary)
+                                Text(context.state.startedAt.formatted(date: .omitted, time: .shortened))
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                            }
                         }
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 4)
                 }
             } compactLeading: {
-                Image(systemName: "exclamationmark.triangle.fill")
+                Image(systemName: severityIcon(context.attributes.severity))
                     .foregroundStyle(severityColor(context.attributes.severity))
             } compactTrailing: {
                 let shortTopic = context.attributes.topic.components(separatedBy: "/").last ?? context.attributes.topic
@@ -56,7 +61,7 @@ struct MaydayLiveActivityLiveActivity: Widget {
                     .font(.caption2)
                     .lineLimit(1)
             } minimal: {
-                Image(systemName: "exclamationmark.triangle.fill")
+                Image(systemName: severityIcon(context.attributes.severity))
                     .foregroundStyle(severityColor(context.attributes.severity))
             }
             .keylineTint(severityColor(context.attributes.severity))
@@ -65,33 +70,54 @@ struct MaydayLiveActivityLiveActivity: Widget {
 
     @ViewBuilder
     func lockScreenView(context: ActivityViewContext<AlertAttributes>) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .font(.title2)
-                .foregroundStyle(severityColor(context.attributes.severity))
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(context.attributes.topic)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(context.state.title)
-                    .font(.subheadline.bold())
-                if let value = context.state.value {
-                    Text(value)
-                        .font(.caption)
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(severityColor(context.attributes.severity).opacity(0.15))
+                        .frame(width: 44, height: 44)
+                    Image(systemName: severityIcon(context.attributes.severity))
+                        .font(.title3)
                         .foregroundStyle(severityColor(context.attributes.severity))
                 }
-                // Text(date, style: .relative) updates automatically without re-render.
-                Text(context.state.startedAt, style: .relative)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(context.state.title)
+                        .font(.subheadline.bold())
+                    Text(context.attributes.topic)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                statusBadge(context.state.status)
             }
 
-            Spacer()
+            HStack(spacing: 16) {
+                if let value = context.state.value {
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(severityColor(context.attributes.severity))
+                            .frame(width: 6, height: 6)
+                        Text(value)
+                            .font(.caption.bold())
+                            .foregroundStyle(severityColor(context.attributes.severity))
+                    }
+                }
 
-            statusBadge(context.state.status)
+                Spacer()
+
+                HStack(spacing: 4) {
+                    Image(systemName: "clock")
+                        .font(.caption2)
+                    Text(context.state.startedAt, style: .relative)
+                        .font(.caption)
+                }
+                .foregroundStyle(.secondary)
+            }
         }
-        .padding()
+        .padding(16)
     }
 
     @ViewBuilder
@@ -101,18 +127,27 @@ struct MaydayLiveActivityLiveActivity: Widget {
             : ("завершён", .green)
         Text(text)
             .font(.caption2.bold())
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
-            .background(color.opacity(0.2))
+            .textCase(.uppercase)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(color.opacity(0.15))
             .foregroundStyle(color)
-            .cornerRadius(4)
+            .clipShape(Capsule())
     }
 
     func severityColor(_ severity: Severity) -> Color {
         switch severity {
         case .critical: return .red
-        case .warning: return .yellow
+        case .warning: return .orange
         case .info: return .blue
+        }
+    }
+
+    func severityIcon(_ severity: Severity) -> String {
+        switch severity {
+        case .critical: return "flame.fill"
+        case .warning: return "exclamationmark.triangle.fill"
+        case .info: return "info.circle.fill"
         }
     }
 }

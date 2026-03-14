@@ -47,7 +47,7 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
 
         // Update badge
         if let badge = aps["badge"] as? Int {
-            await UIApplication.shared.setApplicationIconBadgeNumber(badge)
+            try? await UNUserNotificationCenter.current().setBadgeCount(badge)
         }
     }
 
@@ -85,9 +85,11 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
         if currentActivities.count >= 3 {
             // End the oldest
             if let oldest = currentActivities.min(by: {
-                $0.contentState.startedAt < $1.contentState.startedAt
+                $0.content.state.startedAt < $1.content.state.startedAt
             }) {
-                await oldest.end(ActivityContent(state: oldest.contentState, staleDate: nil), dismissalPolicy: .immediate)
+                let finalState = oldest.content.state
+                nonisolated(unsafe) let activity = oldest
+                await activity.end(ActivityContent(state: finalState, staleDate: nil), dismissalPolicy: .immediate)
             }
         }
 
@@ -117,7 +119,7 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
     }
 
     // MARK: - UNUserNotificationCenterDelegate
-    func userNotificationCenter(
+    nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
@@ -125,7 +127,7 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
         completionHandler([.banner, .badge, .sound])
     }
 
-    func userNotificationCenter(
+    nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
