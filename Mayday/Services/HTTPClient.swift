@@ -166,8 +166,8 @@ actor HTTPClient {
 
     private init() {
         #if DEBUG
-        ssoBaseURL = "http://localhost:8081"
-        notificationBaseURL = "http://localhost:8092"
+        ssoBaseURL = "http://192.168.3.7:8081"
+        notificationBaseURL = "http://192.168.3.7:8092"
         #else
         ssoBaseURL = "https://id.robonen.ru"
         notificationBaseURL = "https://notify.robonen.ru"
@@ -252,6 +252,13 @@ actor HTTPClient {
                 throw APIError.serverError(errorResponse.message)
             }
             throw APIError.serverError("HTTP \(httpResponse.statusCode)")
+        }
+
+        // 204 No Content — return empty decodable if possible
+        if httpResponse.statusCode == 204 || data.isEmpty {
+            if let empty = EmptyResponse() as? T {
+                return empty
+            }
         }
 
         let decoder = JSONDecoder()

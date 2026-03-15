@@ -5,23 +5,8 @@ struct LoginResponse: Decodable, Sendable {
     let tokens: TokenPair
 }
 
-struct RegisterResponse: Decodable, Sendable {
-    let user: UserResponse
-    
-    private enum CodingKeys: String, CodingKey {
-        case id, email, status, metadata, roles
-        case emailVerifiedAt = "email_verified_at"
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-    }
-    
-    init(from decoder: Decoder) throws {
-        user = try UserResponse(from: decoder)
-    }
-}
-
-struct VerifyEmailResponse: Decodable, Sendable {
-    let user: UserResponse
+struct MessageResponse: Decodable, Sendable {
+    let message: String
 }
 
 actor AuthService {
@@ -42,13 +27,12 @@ actor AuthService {
         return response
     }
 
-    func verifyEmail(email: String, code: String) async throws -> UserResponse {
-        let response: VerifyEmailResponse = try await client.request(.verifyEmail(email: email, code: code))
-        return response.user
+    func verifyEmail(email: String, code: String) async throws {
+        let _: MessageResponse = try await client.request(.verifyEmail(email: email, code: code))
     }
 
     func resendCode(email: String) async throws {
-        let _: ResendCodeResponse = try await client.request(.resendCode(email: email))
+        let _: MessageResponse = try await client.request(.resendCode(email: email))
     }
 
     func logout() async throws {
@@ -62,10 +46,6 @@ actor AuthService {
     func getMe() async throws -> UserResponse {
         try await client.request(.getMe)
     }
-}
-
-struct ResendCodeResponse: Decodable, Sendable {
-    let message: String
 }
 
 struct EmptyResponse: Decodable, Sendable {}

@@ -32,9 +32,15 @@
 		AA000001000023 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000023 /* ChangePasswordView.swift */; };
 		AA000001000024 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000024 /* SessionsView.swift */; };
 		AA000001000025 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000025 /* Assets.xcassets */; };
-		AA000001000026 /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000026A /* PreviewData.swift */; };
+		AA000001000034 /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000034 /* AppTextField.swift */; };
+		AA000001000035 /* AppSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000035 /* AppSecureField.swift */; };
+		AA000001000036 /* AppBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000036 /* AppBackground.swift */; };
+		AA000001000037 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000037 /* CardContainer.swift */; };
+		AA000001000038 /* NotificationIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000038 /* NotificationIconView.swift */; };
+		AA000001000039 /* OTPDigitField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000039 /* OTPDigitField.swift */; };
 		AA000001000027 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
 		AA000001000028 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000028 /* InfoPlist.xcstrings */; };
+		AA000001000040 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000040 /* LaunchScreen.storyboard */; };
 		AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000030 /* MaydayLiveActivityBundle.swift */; };
 		AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000031 /* MaydayLiveActivityLiveActivity.swift */; };
 		AA000001000032 /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
@@ -93,11 +99,18 @@
 		AA000002000024 /* SessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsView.swift; sourceTree = "<group>"; };
 		AA000002000025 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA000002000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AA000002000026A /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		AA000002000027 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AA000002000028 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		AA000002000029 /* Mayday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mayday.entitlements; sourceTree = "<group>"; };
+		AA000002000040 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA000002000030 /* MaydayLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityBundle.swift; sourceTree = "<group>"; };
 		AA000002000031 /* MaydayLiveActivityLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityLiveActivity.swift; sourceTree = "<group>"; };
+		AA000002000034 /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
+		AA000002000035 /* AppSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecureField.swift; sourceTree = "<group>"; };
+		AA000002000036 /* AppBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackground.swift; sourceTree = "<group>"; };
+		AA000002000037 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
+		AA000002000038 /* NotificationIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationIconView.swift; sourceTree = "<group>"; };
+		AA000002000039 /* OTPDigitField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPDigitField.swift; sourceTree = "<group>"; };
 		AA000002000033 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA000008000001 /* MaydayLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MaydayLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000009000001 /* Mayday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mayday.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +153,8 @@
 				AA000002000026 /* Info.plist */,
 				AA000002000027 /* Localizable.xcstrings */,
 				AA000002000028 /* InfoPlist.xcstrings */,
+				AA000002000029 /* Mayday.entitlements */,
+				AA000002000040 /* LaunchScreen.storyboard */,
 				AA000011000003 /* Models */,
 				AA000011000004 /* Services */,
 				AA000011000005 /* ViewModels */,
@@ -168,7 +183,6 @@
 				AA000002000011 /* AuthService.swift */,
 				AA000002000012 /* NotificationsAPIService.swift */,
 				AA000002000013 /* PushNotificationService.swift */,
-				AA000002000026A /* PreviewData.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -189,6 +203,7 @@
 				AA000011000007 /* Auth */,
 				AA000011000008 /* Notifications */,
 				AA000011000009 /* Settings */,
+				AA000011000011 /* UIKit */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -220,6 +235,19 @@
 				AA000002000024 /* SessionsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		AA000011000011 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000034 /* AppTextField.swift */,
+				AA000002000035 /* AppSecureField.swift */,
+				AA000002000036 /* AppBackground.swift */,
+				AA000002000037 /* CardContainer.swift */,
+				AA000002000038 /* NotificationIconView.swift */,
+				AA000002000039 /* OTPDigitField.swift */,
+			);
+			path = UIKit;
 			sourceTree = "<group>";
 		};
 		AA000011000010 /* MaydayLiveActivity */ = {
@@ -326,6 +354,7 @@
 				AA000001000025 /* Assets.xcassets in Resources */,
 				AA000001000027 /* Localizable.xcstrings in Resources */,
 				AA000001000028 /* InfoPlist.xcstrings in Resources */,
+				AA000001000040 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +397,12 @@
 				AA000001000022 /* SettingsView.swift in Sources */,
 				AA000001000023 /* ChangePasswordView.swift in Sources */,
 				AA000001000024 /* SessionsView.swift in Sources */,
-				AA000001000026 /* PreviewData.swift in Sources */,
+				AA000001000034 /* AppTextField.swift in Sources */,
+				AA000001000035 /* AppSecureField.swift in Sources */,
+				AA000001000036 /* AppBackground.swift in Sources */,
+				AA000001000037 /* CardContainer.swift in Sources */,
+				AA000001000038 /* NotificationIconView.swift in Sources */,
+				AA000001000039 /* OTPDigitField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +433,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Mayday/Mayday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WA8SWY233K;
@@ -426,6 +461,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Mayday/Mayday.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WA8SWY233K;

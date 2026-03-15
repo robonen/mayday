@@ -1,24 +1,49 @@
 import SwiftUI
 
 struct NotificationDetailView: View {
-    let notification: AppNotification
-    let viewModel: NotificationsViewModel
+    let notificationId: UUID
+    @ObservedObject var viewModel: NotificationsViewModel
+
+    private var notification: AppNotification? {
+        viewModel.notifications.first { $0.id == notificationId }
+    }
+
+    init(notification: AppNotification, viewModel: NotificationsViewModel) {
+        self.notificationId = notification.id
+        self.viewModel = viewModel
+    }
 
     var body: some View {
+        Group {
+            if let notification {
+                scrollContent(notification)
+            }
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle("details_section")
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            if let notification, !notification.isRead {
+                await viewModel.markAsRead(notification)
+            }
+        }
+    }
+
+    private func scrollContent(_ notification: AppNotification) -> some View {
         ScrollView {
             VStack(spacing: 0) {
                 // Hero header
-                headerSection
+                headerSection(notification)
 
                 // Info cards
                 VStack(spacing: 16) {
-                    detailsCard
+                    detailsCard(notification)
                     
                     if let metadata = notification.metadata, !metadata.isEmpty {
                         metadataCard(metadata)
                     }
 
-                    statusCard
+                    statusCard(notification)
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 24)
@@ -44,29 +69,24 @@ struct NotificationDetailView: View {
                 }
             }
         }
-        .background(Color(.systemGroupedBackground))
-        .navigationTitle("details_section")
-        .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await viewModel.markAsRead(notification)
-        }
     }
 
     // MARK: - Hero Header
 
-    private var headerSection: some View {
-        VStack(spacing: 16) {
+    private func headerSection(_ notification: AppNotification) -> some View {
+        let severity = NotificationSeverity(from: notification.metadata)
+        return VStack(spacing: 16) {
             ZStack {
                 Circle()
                     .fill(Color(.secondarySystemGroupedBackground))
                     .frame(width: 88, height: 88)
-                    .shadow(color: topicColor.opacity(0.3), radius: 12, y: 4)
+                    .shadow(color: severity.color.opacity(0.3), radius: 12, y: 4)
                 Circle()
-                    .fill(topicColor.opacity(0.15))
+                    .fill(severity.color.opacity(0.15))
                     .frame(width: 80, height: 80)
-                Image(systemName: topicIcon)
+                Image(systemName: severity.icon)
                     .font(.system(size: 32))
-                    .foregroundStyle(topicColor)
+                    .foregroundStyle(severity.color)
             }
 
             VStack(spacing: 6) {
@@ -79,7 +99,7 @@ struct NotificationDetailView: View {
                     .foregroundStyle(.secondary)
             }
 
-            statusBadge
+            statusBadge(for: notification)
         }
         .padding(.vertical, 28)
         .frame(maxWidth: .infinity)
@@ -87,7 +107,7 @@ struct NotificationDetailView: View {
 
     // MARK: - Status Badge
 
-    private var statusBadge: some View {
+    private func statusBadge(for notification: AppNotification) -> some View {
         let (text, color): (String, Color) = notification.isRead
             ? (String(localized: "status_read"), .green)
             : (String(localized: "status_new"), .red)
@@ -102,7 +122,7 @@ struct NotificationDetailView: View {
 
     // MARK: - Details Card
 
-    private var detailsCard: some View {
+    private func detailsCard(_ notification: AppNotification) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("details_section", systemImage: "doc.text.fill")
                 .font(.subheadline.bold())
@@ -168,14 +188,14 @@ struct NotificationDetailView: View {
 
     // MARK: - Status Card
 
-    private var statusCard: some View {
+    private func statusCard(_ notification: AppNotification) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("status_section", systemImage: "clock.fill")
                 .font(.subheadline.bold())
                 .foregroundStyle(.primary)
 
             VStack(spacing: 8) {
-                infoRow(icon: "paperplane.fill", label: String(localized: "channel_label"), value: channelLabel)
+                infoRow(icon: "paperplane.fill", label: String(localized: "channel_label"), value: channelLabel(for: notification))
                 Divider()
                 infoRow(icon: "clock", label: String(localized: "received_label"), value: notification.createdAt.formatted(date: .abbreviated, time: .shortened))
                 if let readAt = notification.readAt {
@@ -209,43 +229,13 @@ struct NotificationDetailView: View {
 
     // MARK: - Helpers
 
-    private var channelLabel: String {
+    private func channelLabel(for notification: AppNotification) -> String {
         switch notification.channel {
         case .inApp: return String(localized: "channel_in_app")
         case .apns: return "Push"
         case .email: return "Email"
         case .telegram: return "Telegram"
         case .webhook: return "Webhook"
-        }
-    }
-
-    private var topicIcon: String {
-        let lowered = (notification.source ?? "").lowercased()
-        if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
-            return "flame.fill"
-        } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
-            return "heart.fill"
-        } else if lowered.contains("security") || lowered.contains("безопас") {
-            return "shield.fill"
-        } else if lowered.contains("water") || lowered.contains("вод") || lowered.contains("затоп") {
-            return "drop.fill"
-        } else {
-            return "exclamationmark.triangle.fill"
-        }
-    }
-
-    private var topicColor: Color {
-        let lowered = (notification.source ?? "").lowercased()
-        if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
-            return .red
-        } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
-            return .green
-        } else if lowered.contains("security") || lowered.contains("безопас") {
-            return .blue
-        } else if lowered.contains("water") || lowered.contains("вод") || lowered.contains("затоп") {
-            return .cyan
-        } else {
-            return .orange
         }
     }
 }

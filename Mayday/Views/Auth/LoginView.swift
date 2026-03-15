@@ -6,74 +6,101 @@ struct LoginView: View {
     @State private var password = ""
     @State private var showRegister = false
 
+    private var isFormInvalid: Bool {
+        email.isEmpty || password.isEmpty || authViewModel.isLoading
+    }
+
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Spacer()
-                VStack(spacing: 8) {
-                    Image(systemName: "bell.badge.fill")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.red)
-                    Text("Mayday")
-                        .font(.largeTitle.bold())
-                    Text("login_subtitle")
-                        .font(.subheadline)
+            ZStack {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        Spacer(minLength: 24)
+
+                        VStack(spacing: 10) {
+                            Image("Logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 84, height: 84)
+                                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                                .shadow(color: .red.opacity(0.25), radius: 12, y: 6)
+
+                            Text("Mayday")
+                                .font(.largeTitle.bold())
+
+                            Text("login_subtitle")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.top, 8)
+
+                        VStack(spacing: 14) {
+                            AppTextField(
+                                title: "Email",
+                                icon: "envelope.fill",
+                                text: $email
+                            )
+                            .textContentType(.emailAddress)
+                            .keyboardType(.emailAddress)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+
+                            AppSecureField(
+                                title: "password",
+                                icon: "lock.fill",
+                                text: $password
+                            )
+                            .textContentType(.password)
+                        }
+
+                        if let error = authViewModel.error {
+                            Text(error)
+                                .foregroundStyle(.red)
+                                .font(.footnote)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+
+                        Button {
+                            Task { await authViewModel.login(email: email, password: password) }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [Color.red, Color.red.opacity(0.82)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(height: 52)
+
+                                if authViewModel.isLoading {
+                                    ProgressView()
+                                        .tint(.white)
+                                } else {
+                                    Text("login_button")
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                        }
+                        .disabled(isFormInvalid)
+                        .opacity(isFormInvalid ? 0.6 : 1)
+
+                        Button("login_no_account") {
+                            showRegister = true
+                        }
+                        .font(.footnote.weight(.semibold))
                         .foregroundStyle(.secondary)
-                }
 
-                VStack(spacing: 16) {
-                    TextField("Email", text: $email)
-                        .textFieldStyle(.roundedBorder)
-                        .textContentType(.emailAddress)
-                        .keyboardType(.emailAddress)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-
-                    SecureField("password", text: $password)
-                        .textFieldStyle(.roundedBorder)
-                        .textContentType(.password)
-                }
-
-                if let error = authViewModel.error {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.footnote)
-                        .multilineTextAlignment(.center)
-                }
-
-                Button {
-                    Task { await authViewModel.login(email: email, password: password) }
-                } label: {
-                    if authViewModel.isLoading {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                    } else {
-                        Text("login_button")
-                            .frame(maxWidth: .infinity)
+                        Spacer(minLength: 8)
                     }
+                    .cardContainer()
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(email.isEmpty || password.isEmpty || authViewModel.isLoading)
-
-                Button("login_no_account") {
-                    showRegister = true
-                }
-                .font(.footnote)
-
-                #if DEBUG
-                Button {
-                    Task { await authViewModel.enterPreviewMode() }
-                } label: {
-                    Label("demo_mode", systemImage: "play.circle.fill")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.top, 8)
-                #endif
-
-                Spacer()
             }
-            .padding()
+            .appBackground()
             .navigationDestination(isPresented: $showRegister) {
                 RegisterView()
             }

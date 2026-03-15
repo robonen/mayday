@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "ru",
   "strings" : {
-    "" : {
-
-    },
     "(%lld)" : {
 
     },
@@ -258,38 +255,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Удалить"
-          }
-        }
-      }
-    },
-    "demo_badge" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEMO"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ДЕМО"
-          }
-        }
-      }
-    },
-    "demo_mode" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Demo mode"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Демо-режим"
           }
         }
       }

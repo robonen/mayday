@@ -16,6 +16,29 @@ struct UserResponse: Codable, Identifiable, Sendable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
+
+    init(id: UUID, email: String, status: UserStatus, metadata: [String: AnyCodable]? = nil, emailVerifiedAt: Date? = nil, roles: [String] = [], createdAt: Date, updatedAt: Date) {
+        self.id = id
+        self.email = email
+        self.status = status
+        self.metadata = metadata
+        self.emailVerifiedAt = emailVerifiedAt
+        self.roles = roles
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        email = try container.decode(String.self, forKey: .email)
+        status = try container.decode(UserStatus.self, forKey: .status)
+        metadata = try container.decodeIfPresent([String: AnyCodable].self, forKey: .metadata)
+        emailVerifiedAt = try container.decodeIfPresent(Date.self, forKey: .emailVerifiedAt)
+        roles = try container.decodeIfPresent([String].self, forKey: .roles) ?? []
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+    }
 }
 
 enum UserStatus: String, Codable, Sendable {

@@ -5,7 +5,10 @@ struct ContentView: View {
 
     var body: some View {
         Group {
-            if authViewModel.isAuthenticated {
+            if authViewModel.isCheckingAuth {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+            } else if authViewModel.isAuthenticated {
                 NotificationsView()
             } else {
                 LoginView()

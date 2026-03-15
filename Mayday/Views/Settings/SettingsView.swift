@@ -59,6 +59,23 @@ struct SettingsView: View {
                     Button("logout_all_button", role: .destructive) {
                         showLogoutAllConfirm = true
                     }
+                    .confirmationDialog(
+                        "logout_all_confirm",
+                        isPresented: $showLogoutAllConfirm,
+                        titleVisibility: .visible
+                    ) {
+                        Button("logout_all_action", role: .destructive) {
+                            Task {
+                                do {
+                                    _ = try await NotificationsAPIService.shared.logoutAll()
+                                    await authViewModel.logout()
+                                } catch {
+                                    logoutAllError = error.localizedDescription
+                                }
+                            }
+                        }
+                        Button("cancel", role: .cancel) {}
+                    }
                 }
             }
             .navigationTitle("settings_title")
@@ -74,23 +91,6 @@ struct SettingsView: View {
             .sheet(isPresented: $showSessions) {
                 SessionsView()
                     .environmentObject(viewModel)
-            }
-            .confirmationDialog(
-                "logout_all_confirm",
-                isPresented: $showLogoutAllConfirm,
-                titleVisibility: .visible
-            ) {
-                Button("logout_all_action", role: .destructive) {
-                    Task {
-                        do {
-                            _ = try await NotificationsAPIService.shared.logoutAll()
-                            await authViewModel.logout()
-                        } catch {
-                            logoutAllError = error.localizedDescription
-                        }
-                    }
-                }
-                Button("cancel", role: .cancel) {}
             }
             .alert(
                 "error_title",

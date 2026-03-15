@@ -36,21 +36,8 @@ struct NotificationsView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("notifications_title")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                #if DEBUG
-                if PreviewData.isPreviewMode {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(action: {}) {
-                            Text("demo_badge")
-                                .font(.caption2.bold())
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.orange)
-                        .controlSize(.mini)
-                        .allowsHitTesting(false)
-                    }
-                }
-                #endif
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showSettings = true
@@ -86,6 +73,7 @@ struct NotificationsView: View {
                         NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
                             ActiveNotificationCard(notification: notification)
                         }
+                        .id("\(notification.id)-\(notification.isRead)")
                         .buttonStyle(.plain)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 12)
@@ -103,6 +91,7 @@ struct NotificationsView: View {
                         NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
                             ResolvedNotificationCard(notification: notification)
                         }
+                        .id("\(notification.id)-\(notification.isRead)")
                         .buttonStyle(.plain)
                         .padding(.horizontal, 16)
                         .padding(.bottom, 12)
@@ -146,7 +135,7 @@ struct ActiveNotificationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
-                NotificationIconView(source: notification.source, isActive: true)
+                NotificationIconView(severity: NotificationSeverity(from: notification.metadata), isActive: true)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(notification.subject ?? "")
@@ -206,7 +195,7 @@ struct ResolvedNotificationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top) {
-                NotificationIconView(source: notification.source, isActive: false)
+                NotificationIconView(severity: NotificationSeverity(from: notification.metadata), isActive: false)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(notification.subject ?? "")
@@ -253,53 +242,5 @@ struct ResolvedNotificationCard: View {
         .background(Color(.secondarySystemGroupedBackground))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
-    }
-}
-
-// MARK: - Notification Icon
-
-struct NotificationIconView: View {
-    let source: String?
-    let isActive: Bool
-
-    private var iconName: String {
-        let lowered = (source ?? "").lowercased()
-        if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
-            return "flame.fill"
-        } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
-            return "heart.fill"
-        } else if lowered.contains("security") || lowered.contains("безопас") {
-            return "shield.fill"
-        } else if lowered.contains("water") || lowered.contains("вод") || lowered.contains("затоп") {
-            return "drop.fill"
-        } else {
-            return "exclamationmark.triangle.fill"
-        }
-    }
-
-    private var iconColor: Color {
-        let lowered = (source ?? "").lowercased()
-        if lowered.contains("fire") || lowered.contains("пожар") || lowered.contains("огонь") {
-            return .red
-        } else if lowered.contains("medical") || lowered.contains("медиц") || lowered.contains("здоров") {
-            return .green
-        } else if lowered.contains("security") || lowered.contains("безопас") {
-            return .blue
-        } else if lowered.contains("water") || lowered.contains("вод") || lowered.contains("затоп") {
-            return .cyan
-        } else {
-            return .orange
-        }
-    }
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(isActive ? .white.opacity(0.25) : iconColor.opacity(0.12))
-                .frame(width: 40, height: 40)
-            Image(systemName: iconName)
-                .font(.body)
-                .foregroundStyle(isActive ? .white : iconColor)
-        }
     }
 }

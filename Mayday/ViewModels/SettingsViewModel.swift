@@ -11,12 +11,6 @@ class SettingsViewModel: ObservableObject {
     private let service = NotificationsAPIService.shared
 
     func loadSessions() async {
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            sessions = PreviewData.mockSessions
-            return
-        }
-        #endif
         isLoading = true
         defer { isLoading = false }
         do {
@@ -27,12 +21,6 @@ class SettingsViewModel: ObservableObject {
     }
 
     func deleteSession(_ session: SessionResponse) async {
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            sessions.removeAll { $0.id == session.id }
-            return
-        }
-        #endif
         do {
             try await service.deleteSession(id: session.id)
             sessions.removeAll { $0.id == session.id }
@@ -42,12 +30,6 @@ class SettingsViewModel: ObservableObject {
     }
 
     func changePassword(current: String, new: String) async -> Bool {
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            successMessage = String(localized: "password_changed_success")
-            return true
-        }
-        #endif
         isLoading = true
         error = nil
         defer { isLoading = false }

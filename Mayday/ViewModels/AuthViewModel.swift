@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated = false
+    @Published var isCheckingAuth = true
     @Published var currentUser: UserResponse?
     @Published var isLoading = false
     @Published var error: String?
@@ -12,38 +13,27 @@ class AuthViewModel: ObservableObject {
     private let keychain = KeychainService.shared
 
     func checkAuthStatus() async {
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            currentUser = PreviewData.mockUser
-            isAuthenticated = true
-            return
-        }
-        #endif
         guard keychain.loadAccessToken() != nil else {
             isAuthenticated = false
+            isCheckingAuth = false
             return
         }
-        isLoading = true
-        defer { isLoading = false }
         do {
             currentUser = try await auth.getMe()
             isAuthenticated = true
+            isCheckingAuth = false
             await requestPushIfNeeded()
         } catch APIError.unauthorized {
             isAuthenticated = false
+            isCheckingAuth = false
         } catch {
-            isAuthenticated = false
+            // Network/transient errors — keep authenticated if we already were
+            if !isAuthenticated {
+                isAuthenticated = false
+            }
+            isCheckingAuth = false
         }
     }
-
-    #if DEBUG
-    func enterPreviewMode() async {
-        PreviewData.isPreviewMode = true
-        currentUser = PreviewData.mockUser
-        isAuthenticated = true
-        await PreviewData.startMockLiveActivity()
-    }
-    #endif
 
     func login(email: String, password: String) async {
         isLoading = true
@@ -84,15 +74,6 @@ class AuthViewModel: ObservableObject {
     }
 
     func logout() async {
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            await PreviewData.stopMockLiveActivity()
-            PreviewData.isPreviewMode = false
-            isAuthenticated = false
-            currentUser = nil
-            return
-        }
-        #endif
         isLoading = true
         defer { isLoading = false }
         do {

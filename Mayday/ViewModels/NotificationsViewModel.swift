@@ -10,6 +10,7 @@ class NotificationsViewModel: ObservableObject {
     @Published var isLoadingMore = false
     @Published var error: String?
     @Published var hasMore = true
+    private var hasLoadedOnce = false
 
     private let service = NotificationsAPIService.shared
     private let limit = 50
@@ -17,17 +18,13 @@ class NotificationsViewModel: ObservableObject {
     private var pollingTask: Task<Void, Never>?
 
     func load() async {
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            notifications = PreviewData.mockNotifications
-            hasMore = false
-            return
-        }
-        #endif
-        isLoading = true
+        isLoading = !hasLoadedOnce
         error = nil
         currentOffset = 0
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            hasLoadedOnce = true
+        }
         do {
             let page = try await service.getNotifications(limit: limit, offset: 0)
             notifications = page.notifications
@@ -40,9 +37,6 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func loadMore() async {
-        #if DEBUG
-        if PreviewData.isPreviewMode { return }
-        #endif
         guard !isLoadingMore && hasMore else { return }
         isLoadingMore = true
         defer { isLoadingMore = false }
@@ -60,29 +54,33 @@ class NotificationsViewModel: ObservableObject {
 
     func markAsRead(_ notification: AppNotification) async {
         guard !notification.isRead else { return }
-        #if DEBUG
-        if PreviewData.isPreviewMode {
-            if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-                notifications[index] = notification.withReadAt(Date())
-            }
-            return
+
+        // Optimistic update — reflect read state immediately so the list
+        // shows the correct card style even if the user navigates back
+        // before the API call completes.
+        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
+            notifications[index] = notification.withReadAt(Date())
+            unreadCount = max(0, unreadCount - 1)
+            updateBadge()
         }
-        #endif
+
         do {
             try await service.markAsRead(id: notification.id)
-            if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-                notifications[index] = notification.withReadAt(Date())
-            }
-            updateBadge()
+        } catch is CancellationError {
+            // View disappeared before the request finished — keep
+            // optimistic state; polling will reconcile if needed.
         } catch {
+            // Rollback on real failure
+            if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
+                notifications[index] = notification
+                unreadCount += 1
+                updateBadge()
+            }
             self.error = error.localizedDescription
         }
     }
 
     func markAllAsRead() async {
-        #if DEBUG
-        if PreviewData.isPreviewMode { return }
-        #endif
         do {
             try await service.markAllAsRead()
             await load()
@@ -92,9 +90,6 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func startPolling() {
-        #if DEBUG
-        if PreviewData.isPreviewMode { return }
-        #endif
         guard pollingTask == nil else { return }
         pollingTask = Task {
             while !Task.isCancelled {

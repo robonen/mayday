@@ -39,7 +39,7 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
     func handleRemoteNotification(_ userInfo: [AnyHashable: Any]) async {
         guard let aps = userInfo["aps"] as? [String: Any] else { return }
 
-        // Handle Live Activity push
+        // Handle explicit Live Activity push (event inside aps)
         if let event = aps["event"] as? String {
             await handleLiveActivityPush(event: event, userInfo: userInfo, aps: aps)
             return
@@ -48,6 +48,30 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
         // Update badge
         if let badge = aps["badge"] as? Int {
             try? await UNUserNotificationCenter.current().setBadgeCount(badge)
+        }
+
+        // Start a Live Activity from a regular push if metadata contains severity
+        if let metadata = userInfo["metadata"] as? [String: String],
+           let severityStr = metadata["severity"],
+           let severity = Severity(rawValue: severityStr),
+           let source = userInfo["source"] as? String,
+           let subject = userInfo["subject"] as? String {
+
+            let alertId = (userInfo["notificationId"] as? String) ?? UUID().uuidString
+            let contentState = AlertAttributes.ContentState(
+                title: subject,
+                value: metadata["value"],
+                status: .active,
+                startedAt: Date(),
+                updatedAt: Date()
+            )
+            await startLiveActivity(
+                userInfo: userInfo,
+                contentState: contentState,
+                topic: source,
+                alertId: alertId,
+                severity: severity
+            )
         }
     }
 
@@ -59,7 +83,13 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
 
         switch event {
         case "start":
-            await startLiveActivity(userInfo: userInfo, contentState: contentState)
+            if let attributes = userInfo["attributes"] as? [String: Any],
+               let topic = attributes["topic"] as? String,
+               let alertId = attributes["alertId"] as? String,
+               let severityStr = attributes["severity"] as? String,
+               let severity = Severity(rawValue: severityStr) {
+                await startLiveActivity(userInfo: userInfo, contentState: contentState, topic: topic, alertId: alertId, severity: severity)
+            }
         case "update":
             await updateLiveActivity(alertId: userInfo["alertId"] as? String, contentState: contentState)
         case "end":
@@ -69,13 +99,7 @@ class PushNotificationService: NSObject, ObservableObject, UNUserNotificationCen
         }
     }
 
-    private func startLiveActivity(userInfo: [AnyHashable: Any], contentState: AlertAttributes.ContentState) async {
-        guard let attributes = userInfo["attributes"] as? [String: Any],
-              let topic = attributes["topic"] as? String,
-              let alertId = attributes["alertId"] as? String,
-              let severityStr = attributes["severity"] as? String,
-              let severity = Severity(rawValue: severityStr) else { return }
-
+    private func startLiveActivity(userInfo: [AnyHashable: Any], contentState: AlertAttributes.ContentState, topic: String, alertId: String, severity: Severity) async {
         // Info-level alerts don't warrant a persistent Live Activity — they are low-priority
         // and should only appear as a standard banner notification.
         guard severity != .info else { return }
