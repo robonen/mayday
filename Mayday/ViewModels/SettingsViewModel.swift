@@ -1,12 +1,13 @@
 import Foundation
 import SwiftUI
 
+@Observable
 @MainActor
-class SettingsViewModel: ObservableObject {
-    @Published var sessions: [SessionResponse] = []
-    @Published var isLoading = false
-    @Published var error: String?
-    @Published var successMessage: String?
+final class SettingsViewModel {
+    var sessions: [SessionResponse] = []
+    var isLoading = false
+    var error: String?
+    var successMessage: String?
 
     private let service = NotificationsAPIService.shared
 

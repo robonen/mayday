@@ -23,3 +23,8 @@ struct AppSecureField: View {
         )
     }
 }
+
+#Preview {
+    AppSecureField(title: "Password", icon: "lock.fill", text: .constant(""))
+        .padding()
+}

@@ -17,10 +17,10 @@ enum NotificationSeverity: String {
 
     var color: Color {
         switch self {
-        case .critical: return .red
-        case .warning:  return .orange
-        case .info:     return .blue
-        case .success:  return .green
+        case .critical: return .brand
+        case .warning:  return .warning
+        case .info:     return .info
+        case .success:  return .success
         }
     }
 
@@ -44,4 +44,14 @@ struct NotificationIconView: View {
                 .foregroundStyle(isActive ? .white : severity.color)
         }
     }
+}
+
+#Preview {
+    HStack(spacing: 16) {
+        NotificationIconView(severity: .critical, isActive: true)
+        NotificationIconView(severity: .warning, isActive: false)
+        NotificationIconView(severity: .info, isActive: false)
+        NotificationIconView(severity: .success, isActive: false)
+    }
+    .padding()
 }

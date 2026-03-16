@@ -1,17 +1,9 @@
 import SwiftUI
 
 struct NotificationsView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @StateObject private var viewModel = NotificationsViewModel()
+    @Environment(AuthViewModel.self) private var authViewModel
+    @State private var viewModel = NotificationsViewModel()
     @State private var showSettings = false
-
-    private var unreadNotifications: [AppNotification] {
-        viewModel.notifications.filter { !$0.isRead }
-    }
-
-    private var readNotifications: [AppNotification] {
-        viewModel.notifications.filter { $0.isRead }
-    }
 
     var body: some View {
         NavigationStack {
@@ -49,7 +41,7 @@ struct NotificationsView: View {
             }
             .sheet(isPresented: $showSettings) {
                 SettingsView()
-                    .environmentObject(authViewModel)
+                    .environment(authViewModel)
             }
             .task {
                 await viewModel.load()
@@ -64,12 +56,12 @@ struct NotificationsView: View {
         }
     }
 
-    var notificationsList: some View {
+    private var notificationsList: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                if !unreadNotifications.isEmpty {
+                if !viewModel.unreadNotifications.isEmpty {
                     sectionHeader(String(localized: "notifications_active"))
-                    ForEach(unreadNotifications) { notification in
+                    ForEach(viewModel.unreadNotifications) { notification in
                         NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
                             ActiveNotificationCard(notification: notification)
                         }
@@ -85,9 +77,9 @@ struct NotificationsView: View {
                     }
                 }
 
-                if !readNotifications.isEmpty {
+                if !viewModel.readNotifications.isEmpty {
                     sectionHeader(String(localized: "notifications_completed"))
-                    ForEach(readNotifications) { notification in
+                    ForEach(viewModel.readNotifications) { notification in
                         NavigationLink(destination: NotificationDetailView(notification: notification, viewModel: viewModel)) {
                             ResolvedNotificationCard(notification: notification)
                         }
@@ -112,7 +104,7 @@ struct NotificationsView: View {
         }
     }
 
-    func sectionHeader(_ title: String) -> some View {
+    private func sectionHeader(_ title: String) -> some View {
         HStack {
             Text(title)
                 .font(.subheadline)
@@ -125,6 +117,43 @@ struct NotificationsView: View {
         .padding(.top, 16)
         .padding(.bottom, 8)
     }
+}
+
+// MARK: - Previews
+
+private extension AppNotification {
+    static let previewUnread = AppNotification(
+        id: UUID(), userId: UUID(), scopeId: nil, channel: .inApp,
+        contentType: .plain, templateId: nil, subject: "CPU Usage Critical",
+        body: "Server load has exceeded 95% for the last 5 minutes.",
+        source: "monitoring", metadata: ["severity": "critical"],
+        status: .sent, error: nil, attempts: 1, maxAttempts: 3,
+        nextRetryAt: nil, sentAt: Date(), readAt: nil, createdAt: Date()
+    )
+
+    static let previewRead = AppNotification(
+        id: UUID(), userId: UUID(), scopeId: nil, channel: .inApp,
+        contentType: .plain, templateId: nil, subject: "Deployment Successful",
+        body: "Version 2.1.0 has been deployed to production.",
+        source: "ci/cd", metadata: ["severity": "success"],
+        status: .read, error: nil, attempts: 1, maxAttempts: 3,
+        nextRetryAt: nil, sentAt: Date(), readAt: Date(), createdAt: Date().addingTimeInterval(-3600)
+    )
+}
+
+#Preview("Active Card") {
+    ActiveNotificationCard(notification: .previewUnread)
+        .padding()
+}
+
+#Preview("Resolved Card") {
+    ResolvedNotificationCard(notification: .previewRead)
+        .padding()
+}
+
+#Preview("Notifications List") {
+    NotificationsView()
+        .environment(AuthViewModel())
 }
 
 // MARK: - Active (Unread) Card
@@ -166,7 +195,7 @@ struct ActiveNotificationCard: View {
                 Spacer()
                 Text("open_button")
                     .font(.subheadline.bold())
-                    .foregroundStyle(Color.red)
+                    .foregroundStyle(Color.brand)
                     .padding(.horizontal, 32)
                     .padding(.vertical, 10)
                     .background(Color(.systemBackground))
@@ -177,13 +206,13 @@ struct ActiveNotificationCard: View {
         .padding(16)
         .background(
             LinearGradient(
-                colors: [Color.red, Color.red.opacity(0.85)],
+                colors: [Color.brand, Color.brand.opacity(0.85)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .red.opacity(0.3), radius: 8, y: 4)
+        .shadow(color: .brand.opacity(0.3), radius: 8, y: 4)
     }
 }
 
@@ -231,7 +260,7 @@ struct ResolvedNotificationCard: View {
                 HStack(spacing: 4) {
                     Image(systemName: "checkmark")
                         .font(.caption2)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(.success)
                     Text("notification_read_at \(readAt.formatted(date: .abbreviated, time: .shortened))")
                         .font(.caption)
                         .foregroundStyle(.secondary)

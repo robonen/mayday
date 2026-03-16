@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @StateObject private var viewModel = SettingsViewModel()
-    @Environment(\.dismiss) var dismiss
+    @Environment(AuthViewModel.self) private var authViewModel
+    @State private var viewModel = SettingsViewModel()
+    @Environment(\.dismiss) private var dismiss
     @State private var showChangePassword = false
     @State private var showSessions = false
     @State private var showLogoutAllConfirm = false
     @State private var logoutAllError: String?
+    @State private var showLogoutAllError = false
 
     var body: some View {
         NavigationStack {
@@ -19,9 +20,12 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Button("change_password") {
+                    Button {
                         showChangePassword = true
+                    } label: {
+                        Text("change_password")
                     }
+                    .tint(.primary)
 
                     Button {
                         if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
@@ -29,8 +33,8 @@ struct SettingsView: View {
                         }
                     } label: {
                         Label("push_notifications", systemImage: "bell.badge")
-                            .foregroundStyle(.primary)
                     }
+                    .tint(.primary)
                 }
 
                 Section {
@@ -48,7 +52,7 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .foregroundStyle(.primary)
+                    .tint(.primary)
                 }
 
                 Section {
@@ -71,6 +75,7 @@ struct SettingsView: View {
                                     await authViewModel.logout()
                                 } catch {
                                     logoutAllError = error.localizedDescription
+                                    showLogoutAllError = true
                                 }
                             }
                         }
@@ -86,19 +91,12 @@ struct SettingsView: View {
                 }
             }
             .sheet(isPresented: $showChangePassword) {
-                ChangePasswordView()
+                ChangePasswordView(viewModel: viewModel)
             }
             .sheet(isPresented: $showSessions) {
-                SessionsView()
-                    .environmentObject(viewModel)
+                SessionsView(viewModel: viewModel)
             }
-            .alert(
-                "error_title",
-                isPresented: Binding(
-                    get: { logoutAllError != nil },
-                    set: { if !$0 { logoutAllError = nil } }
-                )
-            ) {
+            .alert("error_title", isPresented: $showLogoutAllError) {
                 Button("OK") { logoutAllError = nil }
             } message: {
                 Text(logoutAllError ?? "")
@@ -108,4 +106,9 @@ struct SettingsView: View {
             }
         }
     }
+}
+
+#Preview {
+    SettingsView()
+        .environment(AuthViewModel())
 }

@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    @Environment(\.dismiss) var dismiss
+    @Environment(AuthViewModel.self) private var authViewModel
+    @Environment(\.dismiss) private var dismiss
 
     @State private var email = ""
     @State private var password = ""
@@ -26,7 +26,7 @@ struct RegisterView: View {
                             .scaledToFit()
                             .frame(width: 76, height: 76)
                             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                            .shadow(color: .red.opacity(0.22), radius: 12, y: 6)
+                            .shadow(color: .brand.opacity(0.22), radius: 12, y: 6)
 
                         Text("register_title")
                             .font(.largeTitle.bold())
@@ -48,21 +48,21 @@ struct RegisterView: View {
 
                     if password.count > 0 && password.count < 8 {
                         Text("password_min_length")
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.brand)
                             .font(.footnote)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
                     if confirmPassword.count > 0 && password != confirmPassword {
                         Text("passwords_mismatch")
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.brand)
                             .font(.footnote)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
                     if let error = authViewModel.error {
                         Text(error)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.brand)
                             .font(.footnote)
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -81,7 +81,7 @@ struct RegisterView: View {
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
                                 .fill(
                                     LinearGradient(
-                                        colors: [Color.red, Color.red.opacity(0.82)],
+                                        colors: [Color.brand, Color.brand.opacity(0.82)],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
@@ -121,4 +121,11 @@ struct RegisterView: View {
     var isFormValid: Bool {
         !email.isEmpty && password.count >= 8 && password == confirmPassword
     }
+}
+
+#Preview {
+    NavigationStack {
+        RegisterView()
+    }
+    .environment(AuthViewModel())
 }

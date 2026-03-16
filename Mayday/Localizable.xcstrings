@@ -2,10 +2,23 @@
   "sourceLanguage" : "ru",
   "strings" : {
     "(%lld)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%lld)"
+          }
+        }
+      }
     },
     "%@ alert: %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ alert: %2$@"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "new",
@@ -31,7 +44,14 @@
       }
     },
     "Active" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active"
+          }
+        }
+      }
     },
     "active_sessions" : {
       "localizations" : {
@@ -61,40 +81,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Активные сессии"
-          }
-        }
-      }
-    },
-    "alert_status_active" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "active"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "активен"
-          }
-        }
-      }
-    },
-    "alert_status_resolved" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "resolved"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "завершён"
           }
         }
       }
@@ -292,7 +278,14 @@
       }
     },
     "Email" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
+          }
+        }
+      }
     },
     "error_invalid_credentials" : {
       "localizations" : {
@@ -503,7 +496,14 @@
       }
     },
     "Mayday" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mayday"
+          }
+        }
+      }
     },
     "new_password" : {
       "localizations" : {
@@ -618,7 +618,14 @@
       }
     },
     "OK" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "open_button" : {
       "localizations" : {
@@ -797,7 +804,14 @@
       }
     },
     "Resolved" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resolved"
+          }
+        }
+      }
     },
     "save_button" : {
       "localizations" : {

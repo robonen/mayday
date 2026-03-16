@@ -2,15 +2,24 @@ import Foundation
 import SwiftUI
 import UIKit
 
+@Observable
 @MainActor
-class NotificationsViewModel: ObservableObject {
-    @Published var notifications: [AppNotification] = []
-    @Published var unreadCount = 0
-    @Published var isLoading = false
-    @Published var isLoadingMore = false
-    @Published var error: String?
-    @Published var hasMore = true
+final class NotificationsViewModel {
+    var notifications: [AppNotification] = []
+    var unreadCount = 0
+    var isLoading = false
+    var isLoadingMore = false
+    var error: String?
+    var hasMore = true
     private var hasLoadedOnce = false
+
+    var unreadNotifications: [AppNotification] {
+        notifications.filter { !$0.isRead }
+    }
+
+    var readNotifications: [AppNotification] {
+        notifications.filter { $0.isRead }
+    }
 
     private let service = NotificationsAPIService.shared
     private let limit = 50

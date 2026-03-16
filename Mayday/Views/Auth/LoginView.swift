@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
     @State private var email = ""
     @State private var password = ""
     @State private var showRegister = false
@@ -23,7 +23,7 @@ struct LoginView: View {
                                 .scaledToFit()
                                 .frame(width: 84, height: 84)
                                 .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                                .shadow(color: .red.opacity(0.25), radius: 12, y: 6)
+                                .shadow(color: .brand.opacity(0.25), radius: 12, y: 6)
 
                             Text("Mayday")
                                 .font(.largeTitle.bold())
@@ -56,7 +56,7 @@ struct LoginView: View {
 
                         if let error = authViewModel.error {
                             Text(error)
-                                .foregroundStyle(.red)
+                                .foregroundStyle(.brand)
                                 .font(.footnote)
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -69,7 +69,7 @@ struct LoginView: View {
                                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                                     .fill(
                                         LinearGradient(
-                                            colors: [Color.red, Color.red.opacity(0.82)],
+                                            colors: [Color.brand, Color.brand.opacity(0.82)],
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         )
@@ -106,4 +106,9 @@ struct LoginView: View {
             }
         }
     }
+}
+
+#Preview {
+    LoginView()
+        .environment(AuthViewModel())
 }

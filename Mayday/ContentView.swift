@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
 
     var body: some View {
         Group {
@@ -18,4 +18,9 @@ struct ContentView: View {
             await authViewModel.checkAuthStatus()
         }
     }
+}
+
+#Preview {
+    ContentView()
+        .environment(AuthViewModel())
 }

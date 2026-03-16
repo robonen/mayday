@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct SessionsView: View {
-    @EnvironmentObject var viewModel: SettingsViewModel
-    @Environment(\.dismiss) var dismiss
+    var viewModel: SettingsViewModel
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -18,8 +18,8 @@ struct SessionsView: View {
                                     .font(.caption)
                                     .padding(.horizontal, 6)
                                     .padding(.vertical, 2)
-                                    .background(Color.green.opacity(0.2))
-                                    .foregroundStyle(.green)
+                                    .background(Color.success.opacity(0.2))
+                                    .foregroundStyle(.success)
                                     .cornerRadius(4)
                             }
                         }
@@ -50,4 +50,8 @@ struct SessionsView: View {
             }
         }
     }
+}
+
+#Preview {
+    SessionsView(viewModel: SettingsViewModel())
 }

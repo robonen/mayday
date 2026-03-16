@@ -23,3 +23,8 @@ struct AppTextField: View {
         )
     }
 }
+
+#Preview {
+    AppTextField(title: "Email", icon: "envelope.fill", text: .constant("user@example.com"))
+        .padding()
+}

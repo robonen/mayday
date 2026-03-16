@@ -1,13 +1,14 @@
 import Foundation
 import SwiftUI
 
+@Observable
 @MainActor
-class AuthViewModel: ObservableObject {
-    @Published var isAuthenticated = false
-    @Published var isCheckingAuth = true
-    @Published var currentUser: UserResponse?
-    @Published var isLoading = false
-    @Published var error: String?
+final class AuthViewModel {
+    var isAuthenticated = false
+    var isCheckingAuth = true
+    var currentUser: UserResponse?
+    var isLoading = false
+    var error: String?
 
     private let auth = AuthService.shared
     private let keychain = KeychainService.shared

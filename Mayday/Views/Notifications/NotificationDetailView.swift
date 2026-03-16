@@ -2,7 +2,7 @@ import SwiftUI
 
 struct NotificationDetailView: View {
     let notificationId: UUID
-    @ObservedObject var viewModel: NotificationsViewModel
+    var viewModel: NotificationsViewModel
 
     private var notification: AppNotification? {
         viewModel.notifications.first { $0.id == notificationId }
@@ -56,12 +56,12 @@ struct NotificationDetailView: View {
                     } label: {
                         Text("mark_as_read")
                             .font(.headline)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.brand)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
                             .background(
                                 RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.red.opacity(0.1))
+                                    .fill(Color.brand.opacity(0.1))
                             )
                     }
                     .padding(.horizontal, 16)
@@ -109,8 +109,8 @@ struct NotificationDetailView: View {
 
     private func statusBadge(for notification: AppNotification) -> some View {
         let (text, color): (String, Color) = notification.isRead
-            ? (String(localized: "status_read"), .green)
-            : (String(localized: "status_new"), .red)
+            ? (String(localized: "status_read"), .success)
+            : (String(localized: "status_new"), .brand)
         return Text(text)
             .font(.caption.bold())
             .foregroundStyle(color)
@@ -237,5 +237,20 @@ struct NotificationDetailView: View {
         case .telegram: return "Telegram"
         case .webhook: return "Webhook"
         }
+    }
+}
+
+#Preview {
+    let notification = AppNotification(
+        id: UUID(), userId: UUID(), scopeId: nil, channel: .inApp,
+        contentType: .plain, templateId: nil, subject: "CPU Usage Critical",
+        body: "Server load has exceeded 95% for the last 5 minutes. Immediate action is required to prevent service degradation.",
+        source: "monitoring", metadata: ["severity": "critical", "host": "prod-01", "region": "eu-west-1"],
+        status: .sent, error: nil, attempts: 1, maxAttempts: 3,
+        nextRetryAt: nil, sentAt: Date(), readAt: nil, createdAt: Date()
+    )
+    let vm = NotificationsViewModel()
+    NavigationStack {
+        NotificationDetailView(notification: notification, viewModel: vm)
     }
 }

@@ -4,7 +4,7 @@ struct VerifyEmailView: View {
     let email: String
     let password: String
 
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
     @State private var codeDigits: [String] = Array(repeating: "", count: 6)
     @State private var resendCooldown = 0
     @State private var focusedIndex: Int?
@@ -40,7 +40,7 @@ struct VerifyEmailView: View {
 
             if let error = authViewModel.error {
                 Text(error)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.brand)
                     .font(.footnote)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,7 +65,7 @@ struct VerifyEmailView: View {
                 .scaledToFit()
                 .frame(width: 72, height: 72)
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .shadow(color: .red.opacity(0.22), radius: 12, y: 6)
+                .shadow(color: .brand.opacity(0.22), radius: 12, y: 6)
 
             Text("verify_email_title")
                 .font(.largeTitle.bold())
@@ -102,7 +102,7 @@ struct VerifyEmailView: View {
                 }
             }
             .font(.footnote.weight(.semibold))
-            .foregroundStyle(resendCooldown > 0 ? Color.secondary : Color.red)
+            .foregroundStyle(resendCooldown > 0 ? Color.secondary : Color.brand)
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
             .background(Color(.tertiarySystemFill))
@@ -136,7 +136,7 @@ struct VerifyEmailView: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .stroke(
                         focusedIndex == index
-                            ? Color.red.opacity(0.9)
+                            ? Color.brand.opacity(0.9)
                             : Color.primary.opacity(0.10),
                         lineWidth: focusedIndex == index ? 2 : 1
                     )
@@ -187,4 +187,11 @@ struct VerifyEmailView: View {
             resendCooldown = 0
         }
     }
+}
+
+#Preview {
+    NavigationStack {
+        VerifyEmailView(email: "user@example.com", password: "password123")
+    }
+    .environment(AuthViewModel())
 }

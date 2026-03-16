@@ -32,19 +32,19 @@
 		AA000001000023 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000023 /* ChangePasswordView.swift */; };
 		AA000001000024 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000024 /* SessionsView.swift */; };
 		AA000001000025 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000025 /* Assets.xcassets */; };
+		AA000001000027 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
+		AA000001000028 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000028 /* InfoPlist.xcstrings */; };
+		AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000030 /* MaydayLiveActivityBundle.swift */; };
+		AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000031 /* MaydayLiveActivityLiveActivity.swift */; };
+		AA000001000032 /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
+		AA000001000033 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
 		AA000001000034 /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000034 /* AppTextField.swift */; };
 		AA000001000035 /* AppSecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000035 /* AppSecureField.swift */; };
 		AA000001000036 /* AppBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000036 /* AppBackground.swift */; };
 		AA000001000037 /* CardContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000037 /* CardContainer.swift */; };
 		AA000001000038 /* NotificationIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000038 /* NotificationIconView.swift */; };
 		AA000001000039 /* OTPDigitField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000039 /* OTPDigitField.swift */; };
-		AA000001000027 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
-		AA000001000028 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000028 /* InfoPlist.xcstrings */; };
 		AA000001000040 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000040 /* LaunchScreen.storyboard */; };
-		AA000001000030 /* MaydayLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000030 /* MaydayLiveActivityBundle.swift */; };
-		AA000001000031 /* MaydayLiveActivityLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000031 /* MaydayLiveActivityLiveActivity.swift */; };
-		AA000001000032 /* AlertAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000008 /* AlertAttributes.swift */; };
-		AA000001000033 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA000002000027 /* Localizable.xcstrings */; };
 		AA000007000001 /* MaydayLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA000008000001 /* MaydayLiveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -102,16 +102,16 @@
 		AA000002000027 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AA000002000028 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		AA000002000029 /* Mayday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mayday.entitlements; sourceTree = "<group>"; };
-		AA000002000040 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA000002000030 /* MaydayLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityBundle.swift; sourceTree = "<group>"; };
 		AA000002000031 /* MaydayLiveActivityLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaydayLiveActivityLiveActivity.swift; sourceTree = "<group>"; };
+		AA000002000033 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA000002000034 /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
 		AA000002000035 /* AppSecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSecureField.swift; sourceTree = "<group>"; };
 		AA000002000036 /* AppBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackground.swift; sourceTree = "<group>"; };
 		AA000002000037 /* CardContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardContainer.swift; sourceTree = "<group>"; };
 		AA000002000038 /* NotificationIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationIconView.swift; sourceTree = "<group>"; };
 		AA000002000039 /* OTPDigitField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPDigitField.swift; sourceTree = "<group>"; };
-		AA000002000033 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA000002000040 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA000008000001 /* MaydayLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MaydayLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000009000001 /* Mayday.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mayday.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -237,6 +237,16 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		AA000011000010 /* MaydayLiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				AA000002000030 /* MaydayLiveActivityBundle.swift */,
+				AA000002000031 /* MaydayLiveActivityLiveActivity.swift */,
+				AA000002000033 /* Info.plist */,
+			);
+			path = MaydayLiveActivity;
+			sourceTree = "<group>";
+		};
 		AA000011000011 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,16 +258,6 @@
 				AA000002000039 /* OTPDigitField.swift */,
 			);
 			path = UIKit;
-			sourceTree = "<group>";
-		};
-		AA000011000010 /* MaydayLiveActivity */ = {
-			isa = PBXGroup;
-			children = (
-				AA000002000030 /* MaydayLiveActivityBundle.swift */,
-				AA000002000031 /* MaydayLiveActivityLiveActivity.swift */,
-				AA000002000033 /* Info.plist */,
-			);
-			path = MaydayLiveActivity;
 			sourceTree = "<group>";
 		};
 		AA000011000099 /* Products */ = {
@@ -449,6 +449,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robonen.mayday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -477,6 +480,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robonen.mayday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
