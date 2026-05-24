@@ -38,7 +38,7 @@ final class NotificationsViewModel {
             let page = try await service.getNotifications(limit: limit, offset: 0)
             notifications = page.notifications
             unreadCount = page.unreadCount
-            hasMore = notifications.count < page.total
+            hasMore = page.hasMore
             updateBadge()
         } catch {
             self.error = error.localizedDescription
@@ -55,7 +55,7 @@ final class NotificationsViewModel {
             notifications.append(contentsOf: page.notifications)
             unreadCount = page.unreadCount
             currentOffset = nextOffset
-            hasMore = notifications.count < page.total
+            hasMore = page.hasMore
         } catch {
             self.error = error.localizedDescription
         }

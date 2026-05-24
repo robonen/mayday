@@ -83,6 +83,7 @@ final class AuthViewModel {
             // Clear anyway
             keychain.clearTokens()
         }
+        LiveActivityRegistrationService.shared.stop()
         isAuthenticated = false
         currentUser = nil
     }
@@ -92,5 +93,6 @@ final class AuthViewModel {
         if granted {
             PushNotificationService.shared.registerForRemoteNotifications()
         }
+        LiveActivityRegistrationService.shared.start()
     }
 }

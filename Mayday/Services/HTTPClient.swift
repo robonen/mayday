@@ -3,6 +3,7 @@ import Foundation
 enum APIError: Error, LocalizedError {
     case invalidURL
     case unauthorized
+    case mfaRequired
     case validationError([String: [String]])
     case serverError(String)
     case networkError(Error)
@@ -12,6 +13,7 @@ enum APIError: Error, LocalizedError {
         switch self {
         case .invalidURL: return String(localized: "error_invalid_url")
         case .unauthorized: return String(localized: "error_invalid_credentials")
+        case .mfaRequired: return String(localized: "error_mfa_required")
         case .validationError(let errors):
             return errors.values.flatMap { $0 }.joined(separator: ", ")
         case .serverError(let message): return message
@@ -23,6 +25,23 @@ enum APIError: Error, LocalizedError {
 
 struct APIResponse<T: Decodable>: Decodable {
     let data: T
+}
+
+struct Pagination: Decodable, Sendable {
+    let total: Int
+    let limit: Int
+    let offset: Int
+    let hasMore: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case total, limit, offset
+        case hasMore = "has_more"
+    }
+}
+
+struct PaginatedResponse<T: Decodable>: Decodable {
+    let data: T
+    let pagination: Pagination
 }
 
 struct APIErrorResponse: Decodable {
@@ -57,6 +76,7 @@ enum Endpoint {
     case listDevices
     case registerDevice(token: String, platform: String)
     case unregisterDevice(id: UUID)
+    case unregisterDeviceByToken(token: String)
     // Preferences
     case getPreferences
     case upsertPreference(channel: String, enabled: Bool, config: [String: String]?)
@@ -67,7 +87,7 @@ enum Endpoint {
              .getMe, .getSessions, .deleteSession, .logoutAll, .changePassword:
             return .sso
         case .getNotifications, .markAsRead, .markAllAsRead,
-             .listDevices, .registerDevice, .unregisterDevice,
+             .listDevices, .registerDevice, .unregisterDevice, .unregisterDeviceByToken,
              .getPreferences, .upsertPreference:
             return .notification
         }
@@ -92,6 +112,7 @@ enum Endpoint {
         case .listDevices: return "/devices"
         case .registerDevice: return "/devices"
         case .unregisterDevice(let id): return "/devices/\(id.uuidString)"
+        case .unregisterDeviceByToken: return "/devices/by-token"
         case .getPreferences: return "/preferences"
         case .upsertPreference: return "/preferences"
         }
@@ -101,7 +122,7 @@ enum Endpoint {
         switch self {
         case .getMe, .getSessions, .getNotifications, .listDevices, .getPreferences:
             return "GET"
-        case .deleteSession, .unregisterDevice:
+        case .deleteSession, .unregisterDevice, .unregisterDeviceByToken:
             return "DELETE"
         case .upsertPreference:
             return "PUT"
@@ -149,6 +170,8 @@ enum Endpoint {
             var params: [String: Any] = ["channel": channel, "enabled": enabled]
             if let config { params["config"] = config }
             return params
+        case .unregisterDeviceByToken(let token):
+            return ["token": token]
         default:
             return nil
         }
@@ -165,13 +188,8 @@ actor HTTPClient {
     private var refreshTask: Task<Void, Error>?
 
     private init() {
-        #if DEBUG
-        ssoBaseURL = "http://192.168.3.7:8081"
-        notificationBaseURL = "http://192.168.3.7:8092"
-        #else
         ssoBaseURL = "https://id.robonen.ru"
         notificationBaseURL = "https://notify.robonen.ru"
-        #endif
     }
 
     private func baseURL(for service: APIService) -> String {
@@ -182,10 +200,61 @@ actor HTTPClient {
     }
 
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        try await performRequest(endpoint, retryOnUnauthorized: endpoint.requiresAuth)
+        let data = try await executeRequest(endpoint, retryOnUnauthorized: endpoint.requiresAuth)
+
+        // 204 No Content — return empty decodable if possible
+        if data.isEmpty {
+            if let empty = EmptyResponse() as? T {
+                return empty
+            }
+        }
+
+        do {
+            let wrapped = try Self.jsonDecoder.decode(APIResponse<T>.self, from: data)
+            return wrapped.data
+        } catch {
+            throw APIError.decodingError(error)
+        }
     }
 
-    private func performRequest<T: Decodable>(_ endpoint: Endpoint, retryOnUnauthorized: Bool) async throws -> T {
+    func requestPaginated<T: Decodable>(_ endpoint: Endpoint) async throws -> (T, Pagination) {
+        let data = try await executeRequest(endpoint, retryOnUnauthorized: endpoint.requiresAuth)
+        do {
+            let wrapped = try Self.jsonDecoder.decode(PaginatedResponse<T>.self, from: data)
+            return (wrapped.data, wrapped.pagination)
+        } catch {
+            throw APIError.decodingError(error)
+        }
+    }
+
+    // Go's default time.Time marshaling uses RFC3339Nano (fractional seconds),
+    // which the built-in .iso8601 strategy rejects. Two pre-built formatters
+    // cover both forms; ISO8601DateFormatter is documented thread-safe for read.
+    nonisolated(unsafe) private static let isoWithFractional: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return f
+    }()
+    nonisolated(unsafe) private static let isoWithoutFractional: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime]
+        return f
+    }()
+
+    private static let jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .custom { d in
+            let container = try d.singleValueContainer()
+            let s = try container.decode(String.self)
+            if let date = isoWithFractional.date(from: s) ?? isoWithoutFractional.date(from: s) {
+                return date
+            }
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid ISO8601 date: \(s)")
+        }
+        return decoder
+    }()
+
+    private func executeRequest(_ endpoint: Endpoint, retryOnUnauthorized: Bool) async throws -> Data {
         guard let url = URL(string: baseURL(for: endpoint.service) + endpoint.path) else {
             throw APIError.invalidURL
         }
@@ -199,8 +268,9 @@ actor HTTPClient {
         }
 
         if let body = endpoint.body {
-            if endpoint.method == "GET" {
-                // Append query parameters to URL for GET requests
+            // DELETE/GET don't carry a JSON body; encode params on the URL instead
+            // so endpoints like /devices/by-token?token=... work.
+            if endpoint.method == "GET" || endpoint.method == "DELETE" {
                 if var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
                     components.queryItems = body.map { key, value in
                         URLQueryItem(name: key, value: "\(value)")
@@ -233,7 +303,7 @@ actor HTTPClient {
             } catch {
                 throw APIError.unauthorized
             }
-            return try await performRequest(endpoint, retryOnUnauthorized: false)
+            return try await executeRequest(endpoint, retryOnUnauthorized: false)
         }
 
         if httpResponse.statusCode == 401 {
@@ -254,21 +324,11 @@ actor HTTPClient {
             throw APIError.serverError("HTTP \(httpResponse.statusCode)")
         }
 
-        // 204 No Content — return empty decodable if possible
-        if httpResponse.statusCode == 204 || data.isEmpty {
-            if let empty = EmptyResponse() as? T {
-                return empty
-            }
+        if httpResponse.statusCode == 204 {
+            return Data()
         }
 
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        do {
-            let wrapped = try decoder.decode(APIResponse<T>.self, from: data)
-            return wrapped.data
-        } catch {
-            throw APIError.decodingError(error)
-        }
+        return data
     }
 
     /// Ensures tokens are refreshed exactly once even when multiple requests receive 401
@@ -285,10 +345,7 @@ actor HTTPClient {
         }
 
         let task = Task<Void, Error> {
-            let response: TokenRefreshResponse = try await self.performRequest(
-                .refresh(refreshToken: refreshToken),
-                retryOnUnauthorized: false
-            )
+            let response: TokenRefreshResponse = try await self.request(.refresh(refreshToken: refreshToken))
             try self.keychain.saveTokens(response.tokens)
         }
         refreshTask = task

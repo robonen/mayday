@@ -69,15 +69,21 @@ enum ContentType: String, Codable, Sendable {
     case markdown
 }
 
-struct NotificationsPage: Codable, Sendable {
+struct NotificationsList: Decodable, Sendable {
     let notifications: [AppNotification]
-    let total: Int
     let unreadCount: Int
 
     enum CodingKeys: String, CodingKey {
-        case notifications, total
+        case notifications
         case unreadCount = "unread_count"
     }
+}
+
+struct NotificationsPage: Sendable {
+    let notifications: [AppNotification]
+    let unreadCount: Int
+    let total: Int
+    let hasMore: Bool
 }
 
 struct DeviceToken: Codable, Identifiable, Sendable {

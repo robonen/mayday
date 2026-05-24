@@ -20,6 +20,8 @@
 		AA000001000011 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000011 /* AuthService.swift */; };
 		AA000001000012 /* NotificationsAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000012 /* NotificationsAPIService.swift */; };
 		AA000001000013 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000013 /* PushNotificationService.swift */; };
+		AA000001000099 /* LiveActivityRegistrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000099 /* LiveActivityRegistrationService.swift */; };
+		AA000001000100 /* DevicePlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000100 /* DevicePlatform.swift */; };
 		AA000001000014 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000014 /* AuthViewModel.swift */; };
 		AA000001000015 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000015 /* NotificationsViewModel.swift */; };
 		AA000001000016 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000016 /* SettingsViewModel.swift */; };
@@ -86,6 +88,8 @@
 		AA000002000011 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		AA000002000012 /* NotificationsAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsAPIService.swift; sourceTree = "<group>"; };
 		AA000002000013 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		AA000002000099 /* LiveActivityRegistrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityRegistrationService.swift; sourceTree = "<group>"; };
+		AA000002000100 /* DevicePlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePlatform.swift; sourceTree = "<group>"; };
 		AA000002000014 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		AA000002000015 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
 		AA000002000016 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
@@ -183,6 +187,8 @@
 				AA000002000011 /* AuthService.swift */,
 				AA000002000012 /* NotificationsAPIService.swift */,
 				AA000002000013 /* PushNotificationService.swift */,
+				AA000002000099 /* LiveActivityRegistrationService.swift */,
+				AA000002000100 /* DevicePlatform.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -386,6 +392,8 @@
 				AA000001000011 /* AuthService.swift in Sources */,
 				AA000001000012 /* NotificationsAPIService.swift in Sources */,
 				AA000001000013 /* PushNotificationService.swift in Sources */,
+				AA000001000099 /* LiveActivityRegistrationService.swift in Sources */,
+				AA000001000100 /* DevicePlatform.swift in Sources */,
 				AA000001000014 /* AuthViewModel.swift in Sources */,
 				AA000001000015 /* NotificationsViewModel.swift in Sources */,
 				AA000001000016 /* SettingsViewModel.swift in Sources */,
@@ -434,6 +442,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Mayday/Mayday.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WA8SWY233K;
@@ -449,6 +458,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robonen.mayday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -465,6 +475,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Mayday/Mayday.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WA8SWY233K;
@@ -480,6 +491,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robonen.mayday;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;

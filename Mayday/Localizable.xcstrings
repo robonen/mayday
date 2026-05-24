@@ -303,6 +303,22 @@
         }
       }
     },
+    "error_mfa_required" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Two-factor authentication is required. Sign in on the web and disable it, or wait for in-app MFA support."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Требуется двухфакторная аутентификация. Войдите в веб-версии и отключите её, либо дождитесь поддержки MFA в приложении."
+          }
+        }
+      }
+    },
     "error_invalid_url" : {
       "localizations" : {
         "en" : {

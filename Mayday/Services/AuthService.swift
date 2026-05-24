@@ -1,8 +1,21 @@
 import Foundation
 
+enum LoginStatus: String, Decodable, Sendable {
+    case authenticated
+    case mfaRequired = "mfa_required"
+}
+
 struct LoginResponse: Decodable, Sendable {
-    let user: UserResponse
-    let tokens: TokenPair
+    let status: LoginStatus
+    let user: UserResponse?
+    let tokens: TokenPair?
+    let mfaToken: String?
+    let methods: [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case status, user, tokens, methods
+        case mfaToken = "mfa_token"
+    }
 }
 
 struct MessageResponse: Decodable, Sendable {
@@ -18,8 +31,16 @@ actor AuthService {
 
     func login(email: String, password: String) async throws -> UserResponse {
         let response: LoginResponse = try await client.request(.login(email: email, password: password))
-        try keychain.saveTokens(response.tokens)
-        return response.user
+        switch response.status {
+        case .authenticated:
+            guard let user = response.user, let tokens = response.tokens else {
+                throw APIError.serverError("Malformed login response")
+            }
+            try keychain.saveTokens(tokens)
+            return user
+        case .mfaRequired:
+            throw APIError.mfaRequired
+        }
     }
 
     func register(email: String, password: String) async throws -> UserResponse {

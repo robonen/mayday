@@ -9,7 +9,15 @@ actor NotificationsAPIService {
     // MARK: - Notifications
 
     func getNotifications(limit: Int = 50, offset: Int = 0, unreadOnly: Bool = false, scope: String? = nil) async throws -> NotificationsPage {
-        try await client.request(.getNotifications(limit: limit, offset: offset, unreadOnly: unreadOnly, scope: scope))
+        let (list, pagination): (NotificationsList, Pagination) = try await client.requestPaginated(
+            .getNotifications(limit: limit, offset: offset, unreadOnly: unreadOnly, scope: scope)
+        )
+        return NotificationsPage(
+            notifications: list.notifications,
+            unreadCount: list.unreadCount,
+            total: pagination.total,
+            hasMore: pagination.hasMore
+        )
     }
 
     func markAsRead(id: UUID) async throws {
